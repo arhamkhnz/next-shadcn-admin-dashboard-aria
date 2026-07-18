@@ -1,33 +1,85 @@
 "use client"
 
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+import * as React from "react"
+import {
+  Label as LabelPrimitive,
+  ProgressBar as ProgressPrimitive,
+  type LabelProps,
+  type ProgressBarProps as ProgressPrimitiveProps,
+} from "react-aria-components"
 
 import { cn } from "@/lib/utils"
 
-function Progress({
-  className,
+type ProgressContextValue = {
+  percentage?: number
+  isIndeterminate: boolean
+  valueText?: string
+}
+
+const ProgressContext = React.createContext<ProgressContextValue | null>(null)
+
+function useProgress() {
+  const context = React.useContext(ProgressContext)
+  if (!context) {
+    throw new Error("useProgress must be used within a Progress.")
+  }
+
+  return context
+}
+
+function ProgressContent({
   children,
-  value,
-  ...props
-}: ProgressPrimitive.Root.Props) {
+  percentage,
+  isIndeterminate,
+  valueText,
+}: ProgressContextValue & {
+  children?: React.ReactNode
+}) {
+  const context = React.useMemo(
+    () => ({ percentage, isIndeterminate, valueText }),
+    [percentage, isIndeterminate, valueText]
+  )
+
   return (
-    <ProgressPrimitive.Root
-      value={value}
-      data-slot="progress"
-      className={cn("flex flex-wrap gap-3", className)}
-      {...props}
-    >
+    <ProgressContext value={context}>
       {children}
       <ProgressTrack>
         <ProgressIndicator />
       </ProgressTrack>
-    </ProgressPrimitive.Root>
+    </ProgressContext>
   )
 }
 
-function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
+function Progress({
+  className,
+  children,
+  ...props
+}: Omit<ProgressPrimitiveProps, "children" | "className"> & {
+  children?: React.ReactNode
+  className?: string
+}) {
   return (
-    <ProgressPrimitive.Track
+    <ProgressPrimitive
+      data-slot="progress"
+      className={cn("flex flex-wrap gap-3", className)}
+      {...props}
+    >
+      {({ percentage, valueText, isIndeterminate }) => (
+        <ProgressContent
+          percentage={percentage}
+          valueText={valueText}
+          isIndeterminate={isIndeterminate}
+        >
+          {children}
+        </ProgressContent>
+      )}
+    </ProgressPrimitive>
+  )
+}
+
+function ProgressTrack({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
       className={cn(
         "relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted",
         className
@@ -40,20 +92,27 @@ function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
 
 function ProgressIndicator({
   className,
+  style,
   ...props
-}: ProgressPrimitive.Indicator.Props) {
+}: React.ComponentProps<"span">) {
+  const { percentage, isIndeterminate } = useProgress()
+
   return (
-    <ProgressPrimitive.Indicator
+    <span
       data-slot="progress-indicator"
       className={cn("h-full bg-primary transition-all", className)}
+      style={{
+        ...style,
+        width: `${isIndeterminate ? 100 : (percentage ?? 0)}%`,
+      }}
       {...props}
     />
   )
 }
 
-function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
+function ProgressLabel({ className, ...props }: LabelProps) {
   return (
-    <ProgressPrimitive.Label
+    <LabelPrimitive
       className={cn("text-sm font-medium", className)}
       data-slot="progress-label"
       {...props}
@@ -61,16 +120,25 @@ function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
   )
 }
 
-function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
+function ProgressValue({
+  className,
+  children,
+  ...props
+}: Omit<React.ComponentProps<"span">, "children"> & {
+  children?: (value: string) => React.ReactNode
+}) {
+  const { valueText } = useProgress()
   return (
-    <ProgressPrimitive.Value
+    <span
       className={cn(
         "ml-auto text-sm text-muted-foreground tabular-nums",
         className
       )}
       data-slot="progress-value"
       {...props}
-    />
+    >
+      {children && valueText != null ? children(valueText) : valueText}
+    </span>
   )
 }
 
