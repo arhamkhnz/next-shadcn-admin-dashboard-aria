@@ -2,14 +2,16 @@
 
 **Studio Admin** - Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
 
-<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot">
+<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard-aria/blob/main/media/dashboard.png?version=5" alt="Dashboard Screenshot">
 
 Most admin templates I found, free or paid, felt cluttered, outdated, or too rigid. I built this as a cleaner alternative with features often missing in others, such as theme toggling and layout controls, while keeping the design modern, minimal, and flexible.
 
-> **View demo:** [studio admin](https://next-shadcn-admin-dashboard-baseui.vercel.app/)
+> **View demo:** [studio admin](https://next-shadcn-admin-dashboard-aria.vercel.app)
 
 > [!NOTE]
 > Looking for the Radix UI version? Check out [next-shadcn-admin-dashboard](https://github.com/arhamkhnz/next-shadcn-admin-dashboard).
+>
+> Looking for the Base UI version? Check out [next-shadcn-admin-dashboard-baseui](https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui).
 >
 > Looking for the TanStack Start version? Check out [tanstack-shadcn-admin-dashboard](https://github.com/arhamkhnz/tanstack-shadcn-admin-dashboard).
 
@@ -18,7 +20,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 
 ## Features
 
-- Built with Next.js 16, TypeScript, Tailwind CSS v4, and Shadcn UI  
+- Built with Next.js 16, TypeScript, Tailwind CSS v4, Shadcn UI, and React Aria  
 - Responsive and mobile-friendly  
 - Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
 - Flexible layouts (collapsible sidebar, variable content widths)  
@@ -39,7 +41,7 @@ Most admin templates I found, free or paid, felt cluttered, outdated, or too rig
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4  
-- **UI Components**: Shadcn UI  
+- **UI Components**: Shadcn UI with React Aria  
 - **Validation**: Zod  
 - **Forms & State Management**: React Hook Form, Zustand  
 - **Tables & Data Handling**: TanStack Table  
@@ -83,7 +85,7 @@ You can run this project locally, or deploy it instantly with Vercel.
 
 ### Deploy with Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard-baseui)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farhamkhnz%2Fnext-shadcn-admin-dashboard-aria)
 
 _Deploy your own copy with one click._
 
@@ -91,12 +93,12 @@ _Deploy your own copy with one click._
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/arhamkhnz/next-shadcn-admin-dashboard-baseui.git
+   git clone https://github.com/arhamkhnz/next-shadcn-admin-dashboard-aria.git
    ```
    
 2. **Navigate into the project**
    ```bash
-    cd next-shadcn-admin-dashboard-baseui
+    cd next-shadcn-admin-dashboard-aria
    ```
    
 3. **Install dependencies**

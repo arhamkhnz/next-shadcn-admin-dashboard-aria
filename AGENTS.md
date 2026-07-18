@@ -2,9 +2,9 @@
 
 ## Project overview
 
-Studio Admin is a responsive admin dashboard built with Next.js 16, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui.
+Studio Admin is a responsive admin dashboard built with Next.js 16, React 19, TypeScript, Tailwind CSS v4, shadcn/ui, and React Aria.
 
-This repository uses the shadcn `base-nova` style. When the shadcn CLI reports `base: "base"`, it refers to Base UI. Always inspect the local components in `src/components/ui/` because individual wrappers may use different primitives.
+This repository uses the shadcn `aria-nova` style. When the shadcn CLI reports `base: "aria"`, it refers to React Aria. Always inspect the local components in `src/components/ui/` because individual wrappers may use different primitives.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
