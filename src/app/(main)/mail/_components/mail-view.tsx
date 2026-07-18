@@ -22,8 +22,8 @@ import {
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuGroup,
@@ -34,7 +34,6 @@ import {
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
 import { useMail } from "./use-mail";
@@ -98,37 +97,34 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
             </Button>
             <Tooltip>Reply</Tooltip>
           </TooltipTrigger>
-          <TooltipTrigger>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" size="icon-sm" aria-label="More actions">
-                <EllipsisVertical />
-              </Button>
-              <DropdownMenu placement="bottom end" className="w-48">
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <ReplyAll />
-                    Reply all
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Forward />
-                    Forward
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <MailOpen />
-                    Mark as unread
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Tag />
-                    Add label
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenu>
-            </DropdownMenuTrigger>
-            <Tooltip>More actions</Tooltip>
-          </TooltipTrigger>
+          <DropdownMenuTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="More actions">
+              <EllipsisVertical />
+            </Button>
+            <DropdownMenu placement="bottom end" className="w-48">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <ReplyAll />
+                  Reply all
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Forward />
+                  Forward
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <MailOpen />
+                  Mark as unread
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Tag />
+                  Add label
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
           <Separator className="h-4 data-vertical:self-center" orientation="vertical" />
           <TooltipTrigger>
             <Button variant="ghost" size="icon-sm" aria-label="Move to trash">
@@ -185,15 +181,15 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
             {mail.attachments?.length ? (
               <>
                 <Collapsible defaultExpanded>
-                  <CollapsibleTrigger
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "sm" }),
-                      "group p-0 font-normal text-muted-foreground hover:bg-transparent hover:text-muted-foreground",
-                    )}
+                  <Button
+                    slot="trigger"
+                    variant="ghost"
+                    size="sm"
+                    className="group p-0 font-normal text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
                   >
                     Attachments ({mail.attachments.length})
                     <ChevronDown className="transition-transform group-aria-expanded:rotate-180" />
-                  </CollapsibleTrigger>
+                  </Button>
 
                   <CollapsibleContent>
                     <div className="flex flex-wrap gap-2">
