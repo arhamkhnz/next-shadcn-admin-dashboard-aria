@@ -132,17 +132,16 @@ export function ProposalSectionsTable({ data: initialData }: { data: ProposalSec
       className="w-full flex-col justify-start gap-6"
     >
       <div className="flex items-center justify-between">
-        <Label htmlFor="view-selector" className="sr-only">
-          View
-        </Label>
         <Select
+          aria-label="View"
+          className="@4xl/main:hidden"
           placeholder="Select a view"
           value={activeView}
           onChange={(key) => {
             if (key != null) setActiveView(key as ViewOption);
           }}
         >
-          <SelectTrigger className="flex @4xl/main:hidden w-fit" size="sm" id="view-selector">
+          <SelectTrigger className="flex w-fit" size="sm" id="view-selector">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
