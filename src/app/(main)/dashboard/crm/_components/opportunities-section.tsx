@@ -17,13 +17,7 @@ import { ChevronDownIcon, ListFilter } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Pagination,
@@ -44,7 +38,7 @@ const stageOptions = ["all", "Proposal Sent", "Discovery", "Negotiation", "Quali
 const healthOptions = ["all", "On Track", "Needs Review", "At Risk", "On Hold"] as const;
 const opportunities = opportunitiesSchema.parse(opportunitiesData);
 
-function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
+function preventPaginationNavigation(event: { preventDefault(): void }) {
   event.preventDefault();
 }
 
@@ -116,50 +110,64 @@ export function OpportunitiesSection() {
                   table.setPageIndex(0);
                 }}
               />
-              <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
+              <DropdownMenuTrigger>
+                <Button variant="outline" size="sm">
                   <ListFilter data-icon="inline-start" />
                   Stage
                   <ChevronDownIcon data-icon="inline-end" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-40">
-                  <DropdownMenuRadioGroup
-                    value={stageFilter}
-                    onValueChange={(value) => {
-                      table.getColumn("stage")?.setFilterValue(value === "all" ? undefined : value);
-                      table.setPageIndex(0);
-                    }}
-                  >
+                </Button>
+                <DropdownMenu
+                  placement="bottom end"
+                  className="w-40"
+                  selectionMode="single"
+                  disallowEmptySelection
+                  selectedKeys={[stageFilter]}
+                  onSelectionChange={(keys) => {
+                    if (keys === "all") return;
+                    const [value] = keys;
+                    if (value == null) return;
+                    table.getColumn("stage")?.setFilterValue(value === "all" ? undefined : value);
+                    table.setPageIndex(0);
+                  }}
+                >
+                  <DropdownMenuGroup>
                     {stageOptions.map((option) => (
-                      <DropdownMenuRadioItem key={option} value={option}>
+                      <DropdownMenuItem key={option} id={option}>
                         {option === "all" ? "All stages" : option}
-                      </DropdownMenuRadioItem>
+                      </DropdownMenuItem>
                     ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
+                  </DropdownMenuGroup>
+                </DropdownMenu>
+              </DropdownMenuTrigger>
+              <DropdownMenuTrigger>
+                <Button variant="outline" size="sm">
                   <ListFilter data-icon="inline-start" />
                   Health
                   <ChevronDownIcon data-icon="inline-end" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-40">
-                  <DropdownMenuRadioGroup
-                    value={healthFilter}
-                    onValueChange={(value) => {
-                      table.getColumn("health")?.setFilterValue(value === "all" ? undefined : value);
-                      table.setPageIndex(0);
-                    }}
-                  >
+                </Button>
+                <DropdownMenu
+                  placement="bottom end"
+                  className="w-40"
+                  selectionMode="single"
+                  disallowEmptySelection
+                  selectedKeys={[healthFilter]}
+                  onSelectionChange={(keys) => {
+                    if (keys === "all") return;
+                    const [value] = keys;
+                    if (value == null) return;
+                    table.getColumn("health")?.setFilterValue(value === "all" ? undefined : value);
+                    table.setPageIndex(0);
+                  }}
+                >
+                  <DropdownMenuGroup>
                     {healthOptions.map((option) => (
-                      <DropdownMenuRadioItem key={option} value={option}>
+                      <DropdownMenuItem key={option} id={option}>
                         {option === "all" ? "All health" : option}
-                      </DropdownMenuRadioItem>
+                      </DropdownMenuItem>
                     ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  </DropdownMenuGroup>
+                </DropdownMenu>
+              </DropdownMenuTrigger>
             </div>
           </CardAction>
         </CardHeader>
@@ -167,32 +175,31 @@ export function OpportunitiesSection() {
           <div className="overflow-hidden">
             <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4 **:data-[slot='table-cell']:py-4">
               <TableHeader className="border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:font-medium **:data-[slot='table-head']:text-foreground **:data-[slot='table-head']:text-sm">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} colSpan={header.colSpan}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
+                {table.getHeaderGroups().flatMap((headerGroup) =>
+                  headerGroup.headers.map((header) => (
+                    <TableHead
+                      key={header.id}
+                      isRowHeader={
+                        header ===
+                        headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                      }
+                    >
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  )),
+                )}
+              </TableHeader>
+              <TableBody
+                className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-row']:hover:bg-transparent"
+                renderEmptyState={() => <div className="flex h-24 items-center justify-center">No results.</div>}
+              >
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow id={row.id} key={row.id} data-state={row.getIsSelected() && "selected"}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                     ))}
                   </TableRow>
                 ))}
-              </TableHeader>
-              <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-row']:hover:bg-transparent">
-                {table.getRowModel().rows.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </div>

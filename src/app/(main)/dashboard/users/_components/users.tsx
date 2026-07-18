@@ -103,31 +103,36 @@ export function Users({ users }: { users: UserRow[] }) {
             </InputGroupAddon>
           </InputGroup>
           <Button variant="outline" size="sm">
-            <SlidersHorizontal /> Hide
+            <SlidersHorizontal data-icon="inline-start" /> Hide
           </Button>
           <Button variant="outline" size="sm">
-            <Cog /> Customize
+            <Cog data-icon="inline-start" /> Customize
           </Button>
           <Button variant="outline" size="sm">
-            <Download /> Export
+            <Download data-icon="inline-start" /> Export
           </Button>
           <Button size="sm">
-            <Plus /> Add User
+            <Plus data-icon="inline-start" /> Add User
           </Button>
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 px-0">
         <div className="flex flex-wrap items-center justify-between gap-3 px-4">
           <div className="flex flex-wrap items-center gap-3">
-            <Select value={roleFilter} onValueChange={(value) => setColumnSelectFilter("role", value)}>
+            <Select
+              value={roleFilter}
+              onChange={(key) => {
+                if (key != null) setColumnSelectFilter("role", String(key));
+              }}
+            >
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Role:</span>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent align="start" alignItemWithTrigger={false}>
+              <SelectContent placement="bottom start">
                 <SelectGroup>
                   {filters.role.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} id={option}>
                       {option}
                     </SelectItem>
                   ))}
@@ -135,15 +140,20 @@ export function Users({ users }: { users: UserRow[] }) {
               </SelectContent>
             </Select>
 
-            <Select value={teamFilter} onValueChange={(value) => setColumnSelectFilter("team", value)}>
+            <Select
+              value={teamFilter}
+              onChange={(key) => {
+                if (key != null) setColumnSelectFilter("team", String(key));
+              }}
+            >
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Team:</span>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent align="start" alignItemWithTrigger={false}>
+              <SelectContent placement="bottom start">
                 <SelectGroup>
                   {filters.team.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} id={option}>
                       {option}
                     </SelectItem>
                   ))}
@@ -151,15 +161,20 @@ export function Users({ users }: { users: UserRow[] }) {
               </SelectContent>
             </Select>
 
-            <Select value={statusFilter} onValueChange={(value) => setColumnSelectFilter("status", value)}>
+            <Select
+              value={statusFilter}
+              onChange={(key) => {
+                if (key != null) setColumnSelectFilter("status", String(key));
+              }}
+            >
               <SelectTrigger size="sm">
                 <span className="text-muted-foreground">Status:</span>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent align="start" alignItemWithTrigger={false}>
+              <SelectContent placement="bottom start">
                 <SelectGroup>
                   {filters.status.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} id={option}>
                       {option}
                     </SelectItem>
                   ))}
@@ -168,15 +183,20 @@ export function Users({ users }: { users: UserRow[] }) {
             </Select>
           </div>
 
-          <Select value={workspaceFilter} onValueChange={(value) => setColumnSelectFilter("workspace", value)}>
+          <Select
+            value={workspaceFilter}
+            onChange={(key) => {
+              if (key != null) setColumnSelectFilter("workspace", String(key));
+            }}
+          >
             <SelectTrigger size="sm">
               <span className="text-muted-foreground">Workspace:</span>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent align="end" alignItemWithTrigger={false}>
+            <SelectContent placement="bottom end">
               <SelectGroup>
                 {filters.workspace.map((option) => (
-                  <SelectItem key={option} value={option}>
+                  <SelectItem key={option} id={option}>
                     {option}
                   </SelectItem>
                 ))}
@@ -188,12 +208,12 @@ export function Users({ users }: { users: UserRow[] }) {
         <div className="flex items-center justify-between gap-3 px-4">
           <div className="text-muted-foreground text-sm tabular-nums">{selectedCount} selected</div>
 
-          <Tabs defaultValue="list">
+          <Tabs defaultSelectedKey="list">
             <TabsList>
-              <TabsTrigger value="list" aria-label="List view">
+              <TabsTrigger id="list" aria-label="List view">
                 <Rows3 />
               </TabsTrigger>
-              <TabsTrigger value="grid" aria-label="Grid view">
+              <TabsTrigger id="grid" aria-label="Grid view">
                 <Grid />
               </TabsTrigger>
             </TabsList>

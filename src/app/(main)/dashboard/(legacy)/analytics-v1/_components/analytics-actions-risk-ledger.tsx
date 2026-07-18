@@ -227,7 +227,7 @@ const ledgerColumns: ColumnDef<LedgerRow>[] = [
           variant="ghost"
           size="sm"
           className="-mr-2 h-8 px-2 text-xs"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Risk Ladder
         </Button>
@@ -292,19 +292,21 @@ export function ActionsRiskLedger() {
         <div className="min-w-0 overflow-hidden rounded-lg border">
           <Table>
             <TableHeader className="bg-muted/30">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
+              {table.getHeaderGroups().flatMap((headerGroup) =>
+                headerGroup.headers.map((header, index) => (
+                  <TableHead key={header.id} isRowHeader={index === 0}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                )),
+              )}
             </TableHeader>
-            <TableBody>
+            <TableBody
+              renderEmptyState={() => (
+                <div className="flex h-24 items-center justify-center text-muted-foreground">No results.</div>
+              )}
+            >
               {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow id={row.id} key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}

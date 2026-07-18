@@ -38,14 +38,14 @@ export function TasksSection() {
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl tracking-tight">Tasks</h2>
         <div className="flex items-center gap-2">
-          <Select defaultValue="today" items={taskRangeItems}>
+          <Select defaultValue="today" placeholder="Today">
             <SelectTrigger className="w-30">
-              <SelectValue placeholder="Today" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 {taskRangeItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <SelectItem key={item.value} id={item.value}>
                     {item.label}
                   </SelectItem>
                 ))}
@@ -64,11 +64,11 @@ export function TasksSection() {
           {items.map((task) => (
             <div key={task.title} className="flex items-center gap-2 p-4">
               <Checkbox
-                checked={task.checked}
+                isSelected={task.checked}
                 aria-label={task.title}
-                onCheckedChange={(checked) => {
+                onChange={(isSelected) => {
                   setItems((current) =>
-                    current.map((item) => (item.title === task.title ? { ...item, checked: checked === true } : item)),
+                    current.map((item) => (item.title === task.title ? { ...item, checked: isSelected } : item)),
                   );
                 }}
               />

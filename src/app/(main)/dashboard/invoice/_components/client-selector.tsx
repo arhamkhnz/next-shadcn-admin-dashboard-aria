@@ -32,8 +32,9 @@ export function ClientSelector() {
             <Field className="gap-1">
               <FieldLabel className="text-xs">Client</FieldLabel>
               <Select
+                placeholder="Select client"
                 value={selectedClient.id}
-                onValueChange={(clientId) => {
+                onChange={(clientId) => {
                   const nextClient = invoiceClients.find((item) => item.id === clientId);
 
                   if (nextClient) {
@@ -42,7 +43,7 @@ export function ClientSelector() {
                 }}
               >
                 <SelectTrigger className="w-full data-[size=default]:h-auto">
-                  <SelectValue placeholder="Select client">
+                  <SelectValue>
                     <div className="flex items-center gap-1.5">
                       <Avatar className="after:rounded-md">
                         <AvatarFallback className="rounded-md bg-card text-foreground">
@@ -57,10 +58,10 @@ export function ClientSelector() {
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent align="start" alignItemWithTrigger={false}>
+                <SelectContent placement="bottom start">
                   <SelectGroup>
                     {invoiceClients.map((clientOption) => (
-                      <SelectItem key={clientOption.id} value={clientOption.id}>
+                      <SelectItem key={clientOption.id} id={clientOption.id}>
                         {clientOption.name}
                       </SelectItem>
                     ))}

@@ -100,14 +100,19 @@ export function BalanceDistributionCard() {
       <CardHeader>
         <CardTitle className="font-normal">Account Allocation</CardTitle>
         <CardAction>
-          <Select onValueChange={(value) => setCurrency(value as Currency)} value={currency}>
+          <Select
+            value={currency}
+            onChange={(key) => {
+              if (key != null) setCurrency(key as Currency);
+            }}
+          >
             <SelectTrigger className="w-36" size="sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 {Object.entries(currencies).map(([value, item]) => (
-                  <SelectItem key={value} value={value}>
+                  <SelectItem key={value} id={value}>
                     {item.label}
                   </SelectItem>
                 ))}

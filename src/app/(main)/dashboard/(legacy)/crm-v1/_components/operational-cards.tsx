@@ -6,6 +6,7 @@ import { Funnel, FunnelChart, LabelList } from "recharts";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { cn, formatCurrency } from "@/lib/utils";
 
@@ -86,9 +87,11 @@ export function OperationalCards() {
           <ul className="space-y-2.5">
             {actionItems.map((item) => (
               <li key={item.id} className="space-y-2 rounded-md border px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <Checkbox defaultChecked={item.checked} />
-                  <span className="font-medium text-sm">{item.title}</span>
+                <Field orientation="horizontal" className="gap-2">
+                  <Checkbox id={`action-item-${item.id}`} defaultSelected={item.checked} />
+                  <FieldLabel htmlFor={`action-item-${item.id}`} className="font-medium text-sm">
+                    {item.title}
+                  </FieldLabel>
                   <span
                     className={cn(
                       "w-fit rounded-md px-2 py-1 font-medium text-xs",
@@ -99,7 +102,7 @@ export function OperationalCards() {
                   >
                     {item.priority}
                   </span>
-                </div>
+                </Field>
                 <div className="font-medium text-muted-foreground text-xs">{item.desc}</div>
                 <div className="flex items-center gap-1">
                   <Clock className="size-3 text-muted-foreground" />

@@ -1,8 +1,6 @@
-import Link from "next/link";
-
 import { ExternalLink } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { LinkButton } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -14,16 +12,16 @@ export default function Page() {
             This iframe shows the standalone mail screen. Open it in full screen for a better view.
           </p>
         </div>
-        <Button
-          render={
-            <Link href="/mail" target="_blank" rel="noreferrer" prefetch={false} aria-label="Open mail in new tab" />
-          }
-          nativeButton={false}
+        <LinkButton
+          href="/mail"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open mail in new tab"
           variant="ghost"
           size="icon-sm"
         >
           <ExternalLink />
-        </Button>
+        </LinkButton>
       </div>
 
       <iframe src="/mail" title="Mail preview" className="min-h-0 flex-1 rounded-lg border bg-background" />

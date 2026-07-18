@@ -83,9 +83,9 @@ export function LoginForm() {
               <Checkbox
                 id="login-remember"
                 name={field.name}
-                checked={field.value}
-                onCheckedChange={(checked) => field.onChange(Boolean(checked))}
-                aria-invalid={fieldState.invalid}
+                isSelected={field.value}
+                onChange={field.onChange}
+                isInvalid={fieldState.invalid}
               />
               <FieldContent>
                 <FieldLabel htmlFor="login-remember" className="font-normal">

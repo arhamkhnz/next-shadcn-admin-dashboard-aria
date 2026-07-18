@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { CircleHelp, ClipboardList, Command, Database, File, Search, Settings } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -77,7 +75,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link prefetch={false} href="/dashboard/default" />}>
+            <SidebarMenuButton href="/dashboard/default">
               <Command />
               <span className="font-semibold text-base">{APP_CONFIG.name}</span>
             </SidebarMenuButton>

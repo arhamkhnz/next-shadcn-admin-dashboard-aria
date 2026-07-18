@@ -48,14 +48,14 @@ export function ProjectsSection() {
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-xl tracking-tight">Projects</h2>
         <div className="flex items-center gap-2">
-          <Select defaultValue="active" items={projectFilterItems}>
+          <Select defaultValue="active" placeholder="Active">
             <SelectTrigger className="w-28">
-              <SelectValue placeholder="Active" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 {projectFilterItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <SelectItem key={item.value} id={item.value}>
                     {item.label}
                   </SelectItem>
                 ))}

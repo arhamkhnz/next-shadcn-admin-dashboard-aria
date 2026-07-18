@@ -221,46 +221,46 @@ export function ShipmentDetails({ shipment }: ShipmentDetailsProps) {
       </div>
       <div className="min-h-0 overflow-hidden">
         <div className="h-full min-h-0 py-2">
-          <Tabs defaultValue="overview" className="h-full gap-0">
+          <Tabs defaultSelectedKey="overview" className="h-full gap-0">
             <TabsList
               className="w-full justify-start gap-2 border-b px-4 **:data-[slot=tabs-trigger]:text-xs sm:gap-4 sm:**:data-[slot=tabs-trigger]:text-sm"
               variant="line"
             >
-              <TabsTrigger className="flex-none" value="overview">
+              <TabsTrigger className="flex-none" id="overview">
                 Overview
               </TabsTrigger>
-              <TabsTrigger className="flex-none" value="route">
+              <TabsTrigger className="flex-none" id="route">
                 Route
               </TabsTrigger>
-              <TabsTrigger className="flex-none" value="cargo">
+              <TabsTrigger className="flex-none" id="cargo">
                 Cargo
               </TabsTrigger>
-              <TabsTrigger className="flex-none" value="documents">
+              <TabsTrigger className="flex-none" id="documents">
                 Documents
               </TabsTrigger>
-              <TabsTrigger className="flex-none" value="activity">
+              <TabsTrigger className="flex-none" id="activity">
                 Activity
               </TabsTrigger>
             </TabsList>
-            <TabsContent className="min-h-0 overflow-auto p-4" value="overview">
+            <TabsContent className="min-h-0 overflow-auto p-4" id="overview">
               <ShipmentOverview shipment={shipment} />
             </TabsContent>
-            <TabsContent className="p-4" value="route">
+            <TabsContent className="p-4" id="route">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
                 Route view coming soon.
               </div>
             </TabsContent>
-            <TabsContent className="p-4" value="cargo">
+            <TabsContent className="p-4" id="cargo">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
                 Cargo view coming soon.
               </div>
             </TabsContent>
-            <TabsContent className="p-4" value="documents">
+            <TabsContent className="p-4" id="documents">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
                 Documents view coming soon.
               </div>
             </TabsContent>
-            <TabsContent className="p-4" value="activity">
+            <TabsContent className="p-4" id="activity">
               <div className="grid h-full place-items-center rounded-md border border-dashed text-muted-foreground text-sm">
                 Activity view coming soon.
               </div>

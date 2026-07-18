@@ -49,14 +49,14 @@ export function PipelineActivity() {
         <CardHeader>
           <CardTitle>Qualified Lead Flow</CardTitle>
           <CardAction>
-            <Select defaultValue="last-12-months" items={pipelineRangeItems}>
+            <Select defaultValue="last-12-months" placeholder="Select range">
               <SelectTrigger size="sm" className="min-w-40">
-                <SelectValue placeholder="Select range" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {pipelineRangeItems.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <SelectItem key={item.value} id={item.value}>
                       {item.label}
                     </SelectItem>
                   ))}

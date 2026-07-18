@@ -9,11 +9,11 @@ import { InvoiceItems } from "./invoice-items";
 export function InvoiceForm() {
   return (
     <div className="flex flex-col gap-4 rounded-xl border bg-card p-4">
-      <Tabs defaultValue="invoice">
+      <Tabs defaultSelectedKey="invoice">
         <TabsList className="w-full">
-          <TabsTrigger value="invoice">Invoice</TabsTrigger>
-          <TabsTrigger value="payment">Payment</TabsTrigger>
-          <TabsTrigger value="business">Business</TabsTrigger>
+          <TabsTrigger id="invoice">Invoice</TabsTrigger>
+          <TabsTrigger id="payment">Payment</TabsTrigger>
+          <TabsTrigger id="business">Business</TabsTrigger>
         </TabsList>
       </Tabs>
 

@@ -83,9 +83,9 @@ export function TransactionsOverviewCard() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
+                <SelectItem id="weekly">Weekly</SelectItem>
+                <SelectItem id="monthly">Monthly</SelectItem>
+                <SelectItem id="yearly">Yearly</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

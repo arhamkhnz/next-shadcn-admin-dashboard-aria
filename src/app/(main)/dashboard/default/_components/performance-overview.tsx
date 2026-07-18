@@ -247,15 +247,15 @@ export function PerformanceOverview() {
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
         <CardAction className="flex items-center gap-2">
-          <Select defaultValue="quarter" items={performancePeriodItems}>
+          <Select defaultValue="quarter" placeholder="3 months">
             <SelectTrigger size="sm" className="w-28">
-              <SelectValue placeholder="3 months" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Period</SelectLabel>
                 {performancePeriodItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <SelectItem key={item.value} id={item.value}>
                     {item.label}
                   </SelectItem>
                 ))}
@@ -263,15 +263,15 @@ export function PerformanceOverview() {
             </SelectContent>
           </Select>
 
-          <Select defaultValue="all" items={performanceSegmentItems}>
+          <Select defaultValue="all" placeholder="All segments">
             <SelectTrigger size="sm" className="w-32">
-              <SelectValue placeholder="All segments" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Segments</SelectLabel>
                 {performanceSegmentItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <SelectItem key={item.value} id={item.value}>
                     {item.label}
                   </SelectItem>
                 ))}

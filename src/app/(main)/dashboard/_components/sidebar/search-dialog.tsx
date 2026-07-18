@@ -115,10 +115,10 @@ export function SearchDialog() {
         <CommandGroup heading={group}>
           {groupItems.map((item) => (
             <CommandItem
-              disabled={item.disabled}
+              isDisabled={item.disabled}
               key={`${group}-${item.id}`}
-              value={`${item.group} ${item.label}`}
-              onSelect={() => handleSelect(item)}
+              textValue={`${item.group} ${item.label}`}
+              onAction={() => handleSelect(item)}
             >
               <span className="flex min-w-0 items-center gap-2">
                 {item.icon && <item.icon />}
@@ -133,7 +133,7 @@ export function SearchDialog() {
   return (
     <>
       <Button
-        onClick={() => handleOpenChange(true)}
+        onPress={() => handleOpenChange(true)}
         variant="link"
         className="px-0! font-normal text-muted-foreground hover:no-underline"
       >
@@ -144,10 +144,9 @@ export function SearchDialog() {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={handleOpenChange}>
-        <Command>
-          <CommandInput placeholder="Search dashboards, users, and more…" value={query} onValueChange={setQuery} />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
+        <Command inputValue={query} onInputChange={setQuery}>
+          <CommandInput placeholder="Search dashboards, users, and more…" />
+          <CommandList renderEmptyState={() => <CommandEmpty>No results found.</CommandEmpty>}>
             {query ? renderGroups(searchItems) : renderGroups(recommendations)}
           </CommandList>
         </Command>

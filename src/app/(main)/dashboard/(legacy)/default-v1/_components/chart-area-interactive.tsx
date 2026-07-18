@@ -128,15 +128,15 @@ export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
 
-  const setTimeRangeFromGroup = (groupValue: string[]) => {
-    const nextValue = groupValue[0];
+  const setTimeRangeFromGroup = (selectedKeys: Set<React.Key>) => {
+    const [nextValue] = selectedKeys;
     if (!nextValue) return;
-    setTimeRange(nextValue);
+    setTimeRange(String(nextValue));
   };
 
-  const setTimeRangeFromSelect = (value: string | null) => {
-    if (!value) return;
-    setTimeRange(value);
+  const setTimeRangeFromSelect = (key: React.Key | null) => {
+    if (key == null) return;
+    setTimeRange(String(key));
   };
 
   React.useEffect(() => {
@@ -169,27 +169,28 @@ export function ChartAreaInteractive() {
         </CardDescription>
         <CardAction>
           <ToggleGroup
-            value={[timeRange]}
-            onValueChange={setTimeRangeFromGroup}
+            selectedKeys={[timeRange]}
+            selectionMode="single"
+            onSelectionChange={setTimeRangeFromGroup}
             variant="outline"
             className="@[767px]/card:flex hidden *:data-[slot=toggle-group-item]:px-4!"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem id="90d">Last 3 months</ToggleGroupItem>
+            <ToggleGroupItem id="30d">Last 30 days</ToggleGroupItem>
+            <ToggleGroupItem id="7d">Last 7 days</ToggleGroupItem>
           </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRangeFromSelect} items={timeRangeItems}>
+          <Select placeholder="Last 3 months" value={timeRange} onChange={setTimeRangeFromSelect}>
             <SelectTrigger
               className="flex @[767px]/card:hidden w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
               size="sm"
               aria-label="Select a value"
             >
-              <SelectValue placeholder="Last 3 months" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
               <SelectGroup>
                 {timeRangeItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value} className="rounded-lg">
+                  <SelectItem key={item.value} id={item.value} className="rounded-lg">
                     {item.label}
                   </SelectItem>
                 ))}

@@ -21,15 +21,15 @@ export default function Page() {
 
         <div className="flex flex-wrap items-center gap-2 lg:w-fit">
           <Button size="sm">
-            <Megaphone />
+            <Megaphone data-icon="inline-start" />
             New Announcement
           </Button>
           <Button size="sm" variant="outline">
-            <BookOpenCheck />
+            <BookOpenCheck data-icon="inline-start" />
             Gradebook
           </Button>
           <Button size="sm" variant="outline">
-            <Plus />
+            <Plus data-icon="inline-start" />
             Add Assignment
           </Button>
         </div>

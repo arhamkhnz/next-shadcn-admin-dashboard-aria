@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { parseDate } from "@internationalized/date";
 import { format, parseISO } from "date-fns";
 import { CalendarIcon, Hash } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 
 import type { InvoiceFormValues } from "./data";
 
@@ -72,37 +73,30 @@ export function InvoiceDetails() {
 function DatePicker({ id, value, onChange }: { id: string; value: string; onChange: (value: string) => void }) {
   const [open, setOpen] = React.useState(false);
   const date = parseDateValue(value);
+  const calendarDate = parseCalendarDateValue(value);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        render={
-          <Button
-            id={id}
-            variant="outline"
-            data-empty={!date}
-            className="w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground"
-          />
-        }
+    <PopoverTrigger isOpen={open} onOpenChange={setOpen}>
+      <Button
+        id={id}
+        variant="outline"
+        data-empty={!date}
+        className="w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground"
       >
         {date ? format(date, "PPP") : <span>Pick a date</span>}
         <CalendarIcon className="text-muted-foreground" />
-      </PopoverTrigger>
-      <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start">
+      </Button>
+      <Popover className="w-(--trigger-width) p-0" placement="bottom start">
         <Calendar
           className="w-full"
-          mode="single"
-          selected={date}
-          onSelect={(selectedDate) => {
-            if (!selectedDate) return;
-
-            onChange(format(selectedDate, "yyyy-MM-dd"));
+          value={calendarDate}
+          onChange={(selectedDate) => {
+            onChange(selectedDate.toString());
             setOpen(false);
           }}
-          defaultMonth={date}
         />
-      </PopoverContent>
-    </Popover>
+      </Popover>
+    </PopoverTrigger>
   );
 }
 
@@ -110,4 +104,12 @@ function parseDateValue(value: string) {
   const date = parseISO(value);
 
   return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function parseCalendarDateValue(value: string) {
+  try {
+    return parseDate(value);
+  } catch {
+    return null;
+  }
 }

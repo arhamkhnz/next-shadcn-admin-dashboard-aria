@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -24,19 +23,17 @@ export const recentLeadsColumns: ColumnDef<RecentLeadRow>[] = [
     header: ({ table }) => (
       <div className="flex items-center justify-center">
         <Checkbox
-          checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          slot={null}
+          isSelected={table.getIsAllPageRowsSelected()}
+          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+          onChange={table.toggleAllPageRowsSelected}
           aria-label="Select all"
         />
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <Checkbox slot={null} isSelected={row.getIsSelected()} onChange={row.toggleSelected} aria-label="Select row" />
       </div>
     ),
     enableHiding: false,
@@ -76,14 +73,12 @@ export const recentLeadsColumns: ColumnDef<RecentLeadRow>[] = [
   {
     id: "actions",
     cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant="ghost" size="icon" className="flex size-8 text-muted-foreground" />}
-        >
+      <DropdownMenuTrigger>
+        <Button variant="ghost" size="icon" className="flex size-8 text-muted-foreground">
           <EllipsisVertical />
           <span className="sr-only">Open menu</span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
+        </Button>
+        <DropdownMenu placement="bottom end" className="w-32">
           <DropdownMenuGroup>
             <DropdownMenuItem>View</DropdownMenuItem>
             <DropdownMenuItem>Assign</DropdownMenuItem>
@@ -93,8 +88,8 @@ export const recentLeadsColumns: ColumnDef<RecentLeadRow>[] = [
           <DropdownMenuGroup>
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
+      </DropdownMenuTrigger>
     ),
     enableHiding: false,
   },

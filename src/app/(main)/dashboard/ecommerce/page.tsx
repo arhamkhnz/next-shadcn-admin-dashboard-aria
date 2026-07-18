@@ -25,31 +25,31 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap items-end justify-end gap-2 lg:w-fit">
-          <Select defaultValue="this-month">
+          <Select defaultValue="this-month" placeholder="This Month">
             <SelectTrigger className="w-34" id="ecommerce-period" size="sm">
-              <SelectValue placeholder="This Month" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="this-month">This Month</SelectItem>
-                <SelectItem value="last-month">Last Month</SelectItem>
-                <SelectItem value="last-30-days">Last 30 Days</SelectItem>
-                <SelectItem value="year-to-date">Year to Date</SelectItem>
+                <SelectItem id="this-month">This Month</SelectItem>
+                <SelectItem id="last-month">Last Month</SelectItem>
+                <SelectItem id="last-30-days">Last 30 Days</SelectItem>
+                <SelectItem id="year-to-date">Year to Date</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
 
-          <Select defaultValue="all-channels">
+          <Select defaultValue="all-channels" placeholder="All Channels">
             <SelectTrigger className="w-40" id="ecommerce-channel" size="sm">
-              <SelectValue placeholder="All Channels" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="all-channels">All Channels</SelectItem>
-                <SelectItem value="online-store">Online Store</SelectItem>
-                <SelectItem value="marketplace">Marketplace</SelectItem>
-                <SelectItem value="social">Social</SelectItem>
-                <SelectItem value="retail">Retail</SelectItem>
+                <SelectItem id="all-channels">All Channels</SelectItem>
+                <SelectItem id="online-store">Online Store</SelectItem>
+                <SelectItem id="marketplace">Marketplace</SelectItem>
+                <SelectItem id="social">Social</SelectItem>
+                <SelectItem id="retail">Retail</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

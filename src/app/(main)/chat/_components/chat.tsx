@@ -2,7 +2,7 @@
 
 import { type CSSProperties, useState } from "react";
 
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { useIsLg } from "@/hooks/use-lg";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -75,12 +75,16 @@ export function Chat({ conversations }: ChatProps) {
 
       {/* Tablet/Mobile: Sheet */}
       {!isLg && (
-        <Sheet open={showContact} onOpenChange={setShowContact}>
-          <SheetContent side="right" className="w-80 p-0" showCloseButton={false}>
-            <SheetTitle className="sr-only">Contact profile</SheetTitle>
-            <SheetDescription className="sr-only">View contact details and activity</SheetDescription>
-            <ChatProfileDetails contact={activeConversation.contact} onClose={() => setShowContact(false)} />
-          </SheetContent>
+        <Sheet
+          isOpen={showContact}
+          onOpenChange={setShowContact}
+          side="right"
+          className="w-80 p-0"
+          showCloseButton={false}
+        >
+          <SheetTitle className="sr-only">Contact profile</SheetTitle>
+          <SheetDescription className="sr-only">View contact details and activity</SheetDescription>
+          <ChatProfileDetails contact={activeConversation.contact} onClose={() => setShowContact(false)} />
         </Sheet>
       )}
     </>

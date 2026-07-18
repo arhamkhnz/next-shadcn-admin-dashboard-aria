@@ -98,27 +98,27 @@ export function TopTrafficSources() {
       </CardHeader>
 
       <CardContent className="px-0">
-        <Tabs defaultValue="sources" className="flex flex-col gap-3">
+        <Tabs defaultSelectedKey="sources" className="flex flex-col gap-3">
           <TabsList className="w-full justify-start border-b px-2.5" variant="line">
-            <TabsTrigger className="flex-none font-normal" value="sources">
+            <TabsTrigger className="flex-none font-normal" id="sources">
               Sources
             </TabsTrigger>
-            <TabsTrigger className="flex-none font-normal" value="campaigns">
+            <TabsTrigger className="flex-none font-normal" id="campaigns">
               Campaigns
             </TabsTrigger>
-            <TabsTrigger className="flex-none font-normal" value="referrers">
+            <TabsTrigger className="flex-none font-normal" id="referrers">
               Referrers
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="sources" className="px-4">
+          <TabsContent id="sources" className="px-4">
             <TrafficSourceBarChart data={sourcesData} />
           </TabsContent>
 
-          <TabsContent value="campaigns" className="px-4">
+          <TabsContent id="campaigns" className="px-4">
             <TrafficSourceBarChart data={campaignsData} />
           </TabsContent>
-          <TabsContent value="referrers" className="px-4">
+          <TabsContent id="referrers" className="px-4">
             <TrafficSourceBarChart data={referrersData} />
           </TabsContent>
         </Tabs>

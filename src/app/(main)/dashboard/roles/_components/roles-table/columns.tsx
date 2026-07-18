@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -110,16 +109,16 @@ export const rolesColumns: ColumnDef<Role>[] = [
       const needsReview = row.original.status === "Needs review";
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Open actions" />}>
+        <DropdownMenuTrigger>
+          <Button variant="ghost" size="icon-sm" aria-label="Open actions">
             <MoreVertical />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48" align="end">
+          </Button>
+          <DropdownMenu className="w-48" placement="bottom end">
             <DropdownMenuGroup>
               {needsReview ? <DropdownMenuItem>Review changes</DropdownMenuItem> : null}
               <DropdownMenuItem>View details</DropdownMenuItem>
-              <DropdownMenuItem disabled={isSystemRole}>Edit role</DropdownMenuItem>
-              <DropdownMenuItem disabled={isSystemRole}>Duplicate role</DropdownMenuItem>
+              <DropdownMenuItem isDisabled={isSystemRole}>Edit role</DropdownMenuItem>
+              <DropdownMenuItem isDisabled={isSystemRole}>Duplicate role</DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
@@ -128,12 +127,12 @@ export const rolesColumns: ColumnDef<Role>[] = [
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem disabled={isSystemRole} variant="destructive">
+              <DropdownMenuItem isDisabled={isSystemRole} variant="destructive">
                 Archive role
               </DropdownMenuItem>
             </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DropdownMenu>
+        </DropdownMenuTrigger>
       );
     },
     enableColumnFilter: false,

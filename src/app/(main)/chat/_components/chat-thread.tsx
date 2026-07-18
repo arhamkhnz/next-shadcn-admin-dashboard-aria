@@ -22,7 +22,6 @@ import { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from "@/component
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -41,7 +40,7 @@ import {
 } from "@/components/ui/message-scroller";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn, getInitials } from "@/lib/utils";
 
 import { type Message as ChatMessage, type Contact, currentUser } from "./data";
@@ -67,7 +66,7 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
                 size="icon-sm"
                 className="md:hidden"
                 aria-label="Back to conversations"
-                onClick={onBack}
+                onPress={onBack}
               >
                 <ArrowLeft />
               </Button>
@@ -83,31 +82,31 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
           </div>
 
           <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Call" />}>
+            <TooltipTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="Call">
                 <PhoneCall />
-              </TooltipTrigger>
-              <TooltipContent>Call</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Tag" />}>
+              </Button>
+              <Tooltip>Call</Tooltip>
+            </TooltipTrigger>
+            <TooltipTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="Tag">
                 <Tag />
-              </TooltipTrigger>
-              <TooltipContent>Tag</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Snooze" />}>
+              </Button>
+              <Tooltip>Tag</Tooltip>
+            </TooltipTrigger>
+            <TooltipTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="Snooze">
                 <AlarmClock />
-              </TooltipTrigger>
-              <TooltipContent>Snooze</TooltipContent>
-            </Tooltip>
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="More actions" />}>
+              </Button>
+              <Tooltip>Snooze</Tooltip>
+            </TooltipTrigger>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="More actions">
                 <MoreHorizontal />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
+              </Button>
+              <DropdownMenu placement="bottom end" className="w-44">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onSelect={onOpenContact}>
+                  <DropdownMenuItem onAction={onOpenContact}>
                     <UserRound />
                     View profile
                   </DropdownMenuItem>
@@ -124,8 +123,8 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
                 <DropdownMenuGroup>
                   <DropdownMenuItem variant="destructive">Block contact</DropdownMenuItem>
                 </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenu>
+            </DropdownMenuTrigger>
           </div>
         </div>
 
@@ -189,23 +188,23 @@ export function ChatThread({ contact, messages, onOpenContact, onBack, showBackB
       </MessageScrollerProvider>
 
       <div className="px-2">
-        <Tabs defaultValue="reply" className="gap-0 rounded-md border">
+        <Tabs defaultSelectedKey="reply" className="gap-0 rounded-md border">
           <TabsList
             variant="line"
             className="w-full justify-start gap-2 border-b px-3 **:data-[slot=tabs-trigger]:border-x-0 **:data-[slot=tabs-trigger]:px-6 group-data-horizontal/tabs:h-10"
           >
-            <TabsTrigger value="reply" className="flex-none px-1">
+            <TabsTrigger id="reply" className="flex-none px-1">
               Reply
             </TabsTrigger>
-            <TabsTrigger value="note" className="flex-none px-1">
+            <TabsTrigger id="note" className="flex-none px-1">
               Internal note
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="reply" className="m-0">
+          <TabsContent id="reply" className="m-0">
             <MessageComposer placeholder="Type your message..." />
           </TabsContent>
-          <TabsContent value="note" className="m-0">
+          <TabsContent id="note" className="m-0">
             <MessageComposer placeholder="Write an internal note..." />
           </TabsContent>
         </Tabs>

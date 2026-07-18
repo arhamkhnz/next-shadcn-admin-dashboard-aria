@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
@@ -45,29 +43,31 @@ function SortIcon({ sortDirection }: { sortDirection: false | "asc" | "desc" }) 
 
 function TitleColumnHeader({ column }: { column: Column<Task, unknown> }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={<Button variant="ghost" size="sm" className="-ml-3 text-muted-foreground data-popup-open:bg-accent" />}
-      >
+    <DropdownMenuTrigger>
+      <Button variant="ghost" size="sm" className="-ml-3 text-muted-foreground aria-expanded:bg-accent">
         Title
         <SortIcon sortDirection={column.getIsSorted()} />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        <DropdownMenuItem onSelect={() => column.toggleSorting(false)}>
-          <ArrowUp />
-          Asc
-        </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => column.toggleSorting(true)}>
-          <ArrowDown />
-          Desc
-        </DropdownMenuItem>
+      </Button>
+      <DropdownMenu placement="bottom start">
+        <DropdownMenuGroup>
+          <DropdownMenuItem onAction={() => column.toggleSorting(false)}>
+            <ArrowUp />
+            Asc
+          </DropdownMenuItem>
+          <DropdownMenuItem onAction={() => column.toggleSorting(true)}>
+            <ArrowDown />
+            Desc
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => column.clearSorting()}>
-          <RotateCcw />
-          Reset
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuGroup>
+          <DropdownMenuItem onAction={() => column.clearSorting()}>
+            <RotateCcw />
+            Reset
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenu>
+    </DropdownMenuTrigger>
   );
 }
 
@@ -76,17 +76,19 @@ export const columns: ColumnDef<Task>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        slot={null}
+        isSelected={table.getIsAllPageRowsSelected()}
+        isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+        onChange={table.toggleAllPageRowsSelected}
         aria-label="Select all"
         className="translate-y-0.5"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        slot={null}
+        isSelected={row.getIsSelected()}
+        onChange={row.toggleSelected}
         aria-label="Select row"
         className="translate-y-0.5"
       />
@@ -168,39 +170,39 @@ export const columns: ColumnDef<Task>[] = [
 
       return (
         <div className="text-right">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="ghost" size="icon-sm" className="text-muted-foreground data-popup-open:bg-accent" />
-              }
-            >
+          <DropdownMenuTrigger>
+            <Button variant="ghost" size="icon-sm" className="text-muted-foreground aria-expanded:bg-accent">
               <MoreHorizontal />
               <span className="sr-only">Open menu</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Make a copy</DropdownMenuItem>
-              <DropdownMenuItem>Favorite</DropdownMenuItem>
+            </Button>
+            <DropdownMenu placement="bottom end" className="w-40">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem>Make a copy</DropdownMenuItem>
+                <DropdownMenuItem>Favorite</DropdownMenuItem>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuRadioGroup value={task.label}>
+                <DropdownMenuSubContent selectionMode="single" selectedKeys={[task.label]} disallowEmptySelection>
+                  <DropdownMenuGroup>
                     {labels.map((label) => (
-                      <DropdownMenuRadioItem key={label.value} value={label.value}>
+                      <DropdownMenuItem key={label.value} id={label.value}>
                         {label.label}
-                      </DropdownMenuRadioItem>
+                      </DropdownMenuItem>
                     ))}
-                  </DropdownMenuRadioGroup>
+                  </DropdownMenuGroup>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                Delete
-                <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  Delete
+                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
         </div>
       );
     },

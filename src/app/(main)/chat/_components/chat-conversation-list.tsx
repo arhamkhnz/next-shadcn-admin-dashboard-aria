@@ -44,7 +44,7 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={toggleSidebar}
+            onPress={toggleSidebar}
             className="[&_svg]:transition-transform [&_svg]:duration-300"
           >
             {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
@@ -61,21 +61,21 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
 
       <Separator />
 
-      <Tabs defaultValue="all">
+      <Tabs defaultSelectedKey="all">
         <TabsList variant="line" className="w-full border-b px-0 **:data-[slot=tabs-trigger]:border-x-0">
-          <TabsTrigger value="all">
+          <TabsTrigger id="all">
             All
             <span className="text-muted-foreground text-xs">(24)</span>
           </TabsTrigger>
-          <TabsTrigger value="open">
+          <TabsTrigger id="open">
             Open
             <span className="text-muted-foreground text-xs">(18)</span>
           </TabsTrigger>
-          <TabsTrigger value="snoozed">
+          <TabsTrigger id="snoozed">
             Snoozed
             <span className="text-muted-foreground text-xs">(2)</span>
           </TabsTrigger>
-          <TabsTrigger value="closed">Closed</TabsTrigger>
+          <TabsTrigger id="closed">Closed</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -83,10 +83,10 @@ export function ChatConversationList({ conversations, onSelectConversation, clas
         <ScrollArea className="**:data-[slot=scroll-area-viewport]:scroll-fade h-full min-h-0 flex-1 overflow-hidden [&_[data-orientation=vertical][data-slot=scroll-area-scrollbar]]:w-1.5">
           <div className="flex flex-col gap-3 pt-0">
             {conversationGroups.map(({ group, conversations }) => (
-              <Collapsible key={group} defaultOpen>
-                <CollapsibleTrigger className="flex w-full items-center justify-between gap-1 px-3 py-2 font-medium text-muted-foreground text-xs hover:text-foreground [&[data-panel-open]>svg]:rotate-180">
+              <Collapsible key={group} defaultExpanded>
+                <CollapsibleTrigger className="group flex w-full items-center justify-between gap-1 px-3 py-2 font-medium text-muted-foreground text-xs hover:text-foreground">
                   {group}
-                  <ChevronDown className="size-3 transition-transform" />
+                  <ChevronDown className="size-3 transition-transform group-aria-expanded:rotate-180" />
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="flex flex-col gap-1 px-2">

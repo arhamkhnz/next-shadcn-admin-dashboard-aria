@@ -22,11 +22,10 @@ import {
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -34,7 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 import type { Mail } from "./data";
@@ -57,60 +56,54 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
     <div className="flex h-full min-h-0 flex-col gap-3 px-2 py-3">
       <div className="flex items-center">
         <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger
-              render={<Button variant="ghost" size="icon-sm" aria-label="Close message" onClick={handleClose} />}
-            >
+          <TooltipTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="Close message" onPress={handleClose}>
               <X />
-            </TooltipTrigger>
-            <TooltipContent>Close message</TooltipContent>
-          </Tooltip>
+            </Button>
+            <Tooltip>Close message</Tooltip>
+          </TooltipTrigger>
           <Separator className="h-4 data-vertical:self-center" orientation="vertical" />
           <div className="flex items-center gap-0">
-            <Tooltip>
-              <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Previous message" />}>
+            <TooltipTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="Previous message">
                 <ChevronLeft />
-              </TooltipTrigger>
-              <TooltipContent>Previous message</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Next message" />}>
+              </Button>
+              <Tooltip>Previous message</Tooltip>
+            </TooltipTrigger>
+            <TooltipTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="Next message">
                 <ChevronRight />
-              </TooltipTrigger>
-              <TooltipContent>Next message</TooltipContent>
-            </Tooltip>
+              </Button>
+              <Tooltip>Next message</Tooltip>
+            </TooltipTrigger>
           </div>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Pin thread" />}>
+          <TooltipTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="Pin thread">
               <Pin />
-            </TooltipTrigger>
-            <TooltipContent>Pin thread</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Archive" />}>
+            </Button>
+            <Tooltip>Pin thread</Tooltip>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="Archive">
               <Archive />
-            </TooltipTrigger>
-            <TooltipContent>Archive</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Reply" />}>
+            </Button>
+            <Tooltip>Archive</Tooltip>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="Reply">
               <Reply />
-            </TooltipTrigger>
-            <TooltipContent>Reply</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <DropdownMenu>
-              <TooltipTrigger
-                render={
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="More actions" />} />
-                }
-              >
+            </Button>
+            <Tooltip>Reply</Tooltip>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" size="icon-sm" aria-label="More actions">
                 <EllipsisVertical />
-              </TooltipTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              </Button>
+              <DropdownMenu placement="bottom end" className="w-48">
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <ReplyAll />
@@ -132,17 +125,17 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                     Add label
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <TooltipContent>More actions</TooltipContent>
-          </Tooltip>
+              </DropdownMenu>
+            </DropdownMenuTrigger>
+            <Tooltip>More actions</Tooltip>
+          </TooltipTrigger>
           <Separator className="h-4 data-vertical:self-center" orientation="vertical" />
-          <Tooltip>
-            <TooltipTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Move to trash" />}>
+          <TooltipTrigger>
+            <Button variant="ghost" size="icon-sm" aria-label="Move to trash">
               <Trash2 className="text-destructive" />
-            </TooltipTrigger>
-            <TooltipContent>Move to trash</TooltipContent>
-          </Tooltip>
+            </Button>
+            <Tooltip>Move to trash</Tooltip>
+          </TooltipTrigger>
         </div>
       </div>
 
@@ -191,29 +184,22 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
 
             {mail.attachments?.length ? (
               <>
-                <Collapsible defaultOpen>
+                <Collapsible defaultExpanded>
                   <CollapsibleTrigger
-                    render={
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={cn(
-                          "group p-0 font-normal text-muted-foreground",
-                          "hover:bg-transparent hover:text-muted-foreground dark:hover:bg-transparent",
-                          "data-[state=open]:bg-transparent data-[state=open]:text-muted-foreground",
-                        )}
-                      />
-                    }
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "sm" }),
+                      "group p-0 font-normal text-muted-foreground hover:bg-transparent hover:text-muted-foreground",
+                    )}
                   >
                     Attachments ({mail.attachments.length})
-                    <ChevronDown className="group-data-[state=open]:rotate-180" />
+                    <ChevronDown className="transition-transform group-aria-expanded:rotate-180" />
                   </CollapsibleTrigger>
 
                   <CollapsibleContent>
                     <div className="flex flex-wrap gap-2">
                       {mail.attachments.map((attachment) => (
                         <Button size="xs" variant="secondary" key={attachment.id}>
-                          <SimpleIcon icon={attachment.icon} className="size-3 fill-current" />
+                          <SimpleIcon icon={attachment.icon} data-icon="inline-start" className="size-3 fill-current" />
                           <span className="font-normal">{attachment.name}</span>
                           <span className="font-normal text-muted-foreground">{attachment.size}</span>
                         </Button>

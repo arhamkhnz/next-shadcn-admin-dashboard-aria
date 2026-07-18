@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -89,18 +88,21 @@ export const recentOrdersColumns: ColumnDef<OrderRow>[] = [
     header: ({ table }) => (
       <div className="w-10">
         <Checkbox
+          slot={null}
           aria-label="Select all orders"
-          checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          isSelected={table.getIsAllPageRowsSelected()}
+          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+          onChange={table.toggleAllPageRowsSelected}
         />
       </div>
     ),
     cell: ({ row }) => (
       <div className="w-10">
         <Checkbox
+          slot={null}
           aria-label={`Select order ${row.original.id}`}
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          isSelected={row.getIsSelected()}
+          onChange={row.toggleSelected}
         />
       </div>
     ),
@@ -171,19 +173,19 @@ export const recentOrdersColumns: ColumnDef<OrderRow>[] = [
     header: () => <div className="flex w-full justify-end">Actions</div>,
     cell: () => (
       <div className="flex w-full justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<Button aria-label="Open order actions" size="icon-sm" variant="ghost" />}>
+        <DropdownMenuTrigger>
+          <Button aria-label="Open order actions" size="icon-sm" variant="ghost">
             <MoreHorizontal />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuLabel>Order Actions</DropdownMenuLabel>
+          </Button>
+          <DropdownMenu placement="bottom end" className="w-40">
             <DropdownMenuGroup>
+              <DropdownMenuLabel>Order Actions</DropdownMenuLabel>
               <DropdownMenuItem>View order</DropdownMenuItem>
               <DropdownMenuItem>Contact customer</DropdownMenuItem>
               <DropdownMenuItem>Copy order ID</DropdownMenuItem>
             </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DropdownMenu>
+        </DropdownMenuTrigger>
       </div>
     ),
     enableHiding: false,

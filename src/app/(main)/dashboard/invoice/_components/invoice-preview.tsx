@@ -31,7 +31,7 @@ export function InvoicePreview({ invoice }: { invoice: InvoiceFormValues }) {
         <div className="flex items-center justify-between px-4 py-4">
           <h2 className="font-medium text-lg">Preview</h2>
           <ButtonGroup>
-            <Button type="button" variant="outline" onClick={handlePrint}>
+            <Button type="button" variant="outline" onPress={handlePrint}>
               <Printer data-icon="inline-start" />
               Print
             </Button>

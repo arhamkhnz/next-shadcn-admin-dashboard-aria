@@ -62,19 +62,18 @@ export function Calendar() {
         <div className="flex flex-wrap items-center gap-2">
           <Select
             value={selectedCalendar}
-            onValueChange={(value) => {
-              if (value !== null) setSelectedCalendar(value);
+            onChange={(key) => {
+              if (key != null) setSelectedCalendar(String(key));
             }}
-            items={calendars}
           >
             <SelectTrigger className="w-full sm:w-44">
               <CalendarIcon />
               <SelectValue />
             </SelectTrigger>
-            <SelectContent align="start" alignItemWithTrigger={false}>
+            <SelectContent placement="bottom start">
               <SelectGroup>
                 {calendars.map((calendar) => (
-                  <SelectItem key={calendar.value} value={calendar.value}>
+                  <SelectItem key={calendar.value} id={calendar.value}>
                     {calendar.label}
                   </SelectItem>
                 ))}
@@ -82,30 +81,29 @@ export function Calendar() {
             </SelectContent>
           </Select>
           <ButtonGroup>
-            <Button size="icon" variant="outline" onClick={() => controller.prev()}>
+            <Button size="icon" variant="outline" onPress={() => controller.prev()}>
               <ChevronLeft />
             </Button>
-            <Button variant="outline" onClick={() => controller.today()}>
+            <Button variant="outline" onPress={() => controller.today()}>
               Today
             </Button>
-            <Button size="icon" variant="outline" onClick={() => controller.next()}>
+            <Button size="icon" variant="outline" onPress={() => controller.next()}>
               <ChevronRight />
             </Button>
           </ButtonGroup>
           <Select
             value={controller.view?.type ?? views[0].value}
-            onValueChange={(value) => {
-              if (value !== null) controller.changeView(value);
+            onChange={(key) => {
+              if (key != null) controller.changeView(String(key));
             }}
-            items={views}
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
-            <SelectContent align="start" alignItemWithTrigger={false}>
+            <SelectContent placement="bottom start">
               <SelectGroup>
                 {views.map((v) => (
-                  <SelectItem key={v.value} value={v.value}>
+                  <SelectItem key={v.value} id={v.value}>
                     {v.label}
                   </SelectItem>
                 ))}
@@ -113,7 +111,7 @@ export function Calendar() {
             </SelectContent>
           </Select>
           <Button>
-            <Plus />
+            <Plus data-icon="inline-start" />
             Add event
           </Button>
         </div>

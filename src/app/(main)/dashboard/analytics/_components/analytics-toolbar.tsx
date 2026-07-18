@@ -3,7 +3,6 @@ import { Ellipsis, FileDown, FileUp, RefreshCw, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -15,25 +14,25 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 export function AnalyticsToolbar() {
   return (
     <div className="flex items-center gap-2">
-      <Select defaultValue="last-4-weeks">
+      <Select defaultValue="last-4-weeks" placeholder="Select range">
         <SelectTrigger className="w-34">
-          <SelectValue placeholder="Select range" />
+          <SelectValue />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="last-7-days">Last 7 days</SelectItem>
-            <SelectItem value="last-4-weeks">Last 4 weeks</SelectItem>
-            <SelectItem value="last-3-months">Last 3 months</SelectItem>
-            <SelectItem value="year-to-date">Year to date</SelectItem>
+            <SelectItem id="last-7-days">Last 7 days</SelectItem>
+            <SelectItem id="last-4-weeks">Last 4 weeks</SelectItem>
+            <SelectItem id="last-3-months">Last 3 months</SelectItem>
+            <SelectItem id="year-to-date">Year to date</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger render={<Button size="icon" variant="outline" aria-label="More analytics actions" />}>
+      <DropdownMenuTrigger>
+        <Button size="icon" variant="outline" aria-label="More analytics actions">
           <Ellipsis />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
+        </Button>
+        <DropdownMenu placement="bottom end" className="w-48">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Analytics actions</DropdownMenuLabel>
             <DropdownMenuItem>
@@ -56,8 +55,8 @@ export function AnalyticsToolbar() {
               Refresh metrics
             </DropdownMenuItem>
           </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
+      </DropdownMenuTrigger>
     </div>
   );
 }

@@ -12,21 +12,21 @@ import { SpendingBreakdown } from "./_components/spending-breakdown";
 export default function Page() {
   return (
     <div>
-      <Tabs className="gap-4" defaultValue="overview">
+      <Tabs className="gap-4" defaultSelectedKey="overview">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger disabled value="activity">
+          <TabsTrigger id="overview">Overview</TabsTrigger>
+          <TabsTrigger isDisabled id="activity">
             Activity
           </TabsTrigger>
-          <TabsTrigger disabled value="insights">
+          <TabsTrigger isDisabled id="insights">
             Insights
           </TabsTrigger>
-          <TabsTrigger disabled value="utilities">
+          <TabsTrigger isDisabled id="utilities">
             Utilities
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
+        <TabsContent id="overview">
           <div className="flex flex-col gap-4 **:data-[slot=card]:shadow-xs">
             <div className="grid grid-cols-1 gap-4 *:data-[slot=card]:gap-2 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
               <PrimaryAccount />

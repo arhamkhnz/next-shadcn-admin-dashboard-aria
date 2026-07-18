@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -122,18 +121,21 @@ export const usersColumns: ColumnDef<UserRow>[] = [
     header: ({ table }) => (
       <div className="flex items-center justify-center">
         <Checkbox
+          slot={null}
           aria-label="Select all users"
-          checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          isSelected={table.getIsAllPageRowsSelected()}
+          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+          onChange={table.toggleAllPageRowsSelected}
         />
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
         <Checkbox
+          slot={null}
           aria-label={`Select ${row.original.name}`}
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          isSelected={row.getIsSelected()}
+          onChange={row.toggleSelected}
         />
       </div>
     ),
@@ -194,20 +196,16 @@ export const usersColumns: ColumnDef<UserRow>[] = [
     header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => (
       <div className="text-right">
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                aria-label={`Open actions for ${row.original.name}`}
-                className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
-                size="icon-sm"
-                variant="ghost"
-              />
-            }
+        <DropdownMenuTrigger>
+          <Button
+            aria-label={`Open actions for ${row.original.name}`}
+            className="size-8 rounded-md text-muted-foreground hover:bg-muted/50"
+            size="icon-sm"
+            variant="ghost"
           >
-            <MoreHorizontal className="size-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+            <MoreHorizontal />
+          </Button>
+          <DropdownMenu placement="bottom end">
             <DropdownMenuGroup>
               <DropdownMenuItem>View profile</DropdownMenuItem>
               <DropdownMenuItem>Edit user</DropdownMenuItem>
@@ -218,8 +216,8 @@ export const usersColumns: ColumnDef<UserRow>[] = [
             <DropdownMenuGroup>
               <DropdownMenuItem variant="destructive">Deactivate user</DropdownMenuItem>
             </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DropdownMenu>
+        </DropdownMenuTrigger>
       </div>
     ),
     enableHiding: false,

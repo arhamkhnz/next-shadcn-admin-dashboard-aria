@@ -141,18 +141,18 @@ export function ShipmentList({ shipments, selectedShipmentId, onSelectShipment }
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 overflow-hidden px-0">
-        <Tabs defaultValue="all">
+        <Tabs defaultSelectedKey="all">
           <TabsList className="w-full border-b px-4" variant="line">
-            <TabsTrigger className="text-xs" value="all">
+            <TabsTrigger className="text-xs" id="all">
               All (156)
             </TabsTrigger>
-            <TabsTrigger className="text-xs" value="in-transit">
+            <TabsTrigger className="text-xs" id="in-transit">
               In Transit (32)
             </TabsTrigger>
-            <TabsTrigger className="text-xs" value="delivered">
+            <TabsTrigger className="text-xs" id="delivered">
               Delivered (98)
             </TabsTrigger>
-            <TabsTrigger className="text-xs" value="delayed">
+            <TabsTrigger className="text-xs" id="delayed">
               Delayed (9)
             </TabsTrigger>
           </TabsList>

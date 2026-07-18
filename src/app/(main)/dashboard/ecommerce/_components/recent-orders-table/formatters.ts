@@ -1,5 +1,3 @@
-import type React from "react";
-
 import type { OrderFilter } from "./schema";
 
 export function formatOrderCount(filter: OrderFilter, count: number) {
@@ -26,6 +24,6 @@ export function formatSelectedOrderCount(count: number) {
   return `${count.toLocaleString()} ${orderLabel} selected`;
 }
 
-export function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
+export function preventPaginationNavigation(event: { preventDefault(): void }) {
   event.preventDefault();
 }

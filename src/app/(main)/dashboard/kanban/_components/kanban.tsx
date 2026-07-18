@@ -37,12 +37,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -173,17 +168,17 @@ export function Kanban({ initialBoard }: KanbanProps) {
   return (
     <div className="flex h-[calc(100dvh-var(--dashboard-header-height))] min-h-0 min-w-0 flex-col overflow-hidden">
       <div className="flex shrink-0 flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
-        <Tabs defaultValue="board" className="min-w-0">
+        <Tabs defaultSelectedKey="board" className="min-w-0">
           <TabsList className="w-full *:data-[slot=tabs-trigger]:flex-1 sm:w-fit sm:*:data-[slot=tabs-trigger]:flex-none">
-            <TabsTrigger value="board" className="gap-2">
+            <TabsTrigger id="board" className="gap-2">
               <KanbanIcon />
               Board
             </TabsTrigger>
-            <TabsTrigger value="list" className="gap-2">
+            <TabsTrigger id="list" className="gap-2">
               <List />
               List
             </TabsTrigger>
-            <TabsTrigger value="table" className="gap-2">
+            <TabsTrigger id="table" className="gap-2">
               <Table2 />
               Table
             </TabsTrigger>
@@ -211,25 +206,27 @@ export function Kanban({ initialBoard }: KanbanProps) {
               Add task
             </Button>
             <ButtonGroupSeparator />
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button aria-label="Open add task menu" />}>
+            <DropdownMenuTrigger>
+              <Button aria-label="Open add task menu">
                 <ChevronDown />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>
-                  <Upload />
-                  Import CSV
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LayoutTemplate />
-                  Add from template
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bot />
-                  Create automation
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </Button>
+              <DropdownMenu placement="bottom end" className="w-48">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Upload />
+                    Import CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <LayoutTemplate />
+                    Add from template
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Bot />
+                    Create automation
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenu>
+            </DropdownMenuTrigger>
           </ButtonGroup>
         </div>
       </div>

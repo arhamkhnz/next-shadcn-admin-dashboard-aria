@@ -4,18 +4,17 @@ import * as React from "react";
 
 import { eachDayOfInterval, format, startOfDay, subDays } from "date-fns";
 import { Check, ChevronsUpDown, Download } from "lucide-react";
-import type { DateRange } from "react-day-picker";
 import { Area, ComposedChart, XAxis, YAxis } from "recharts";
 
-import { DateRangePicker } from "@/components/date-range-picker";
+import { type DateRange, DateRangePicker } from "@/components/date-range-picker";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 type RiskView = "risk-view" | "momentum" | "quality";
@@ -114,7 +113,7 @@ export function AnalyticsOverview() {
         <div className="flex flex-wrap items-center gap-2">
           <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
           <Button variant="secondary">
-            <Download />
+            <Download data-icon="inline-start" />
             Export
           </Button>
         </div>
@@ -218,18 +217,8 @@ function RiskViewSelect() {
   const listId = React.useId();
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        render={
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-controls={listId}
-            aria-expanded={open}
-            className="w-54 justify-between"
-          />
-        }
-      >
+    <PopoverTrigger isOpen={open} onOpenChange={setOpen}>
+      <Button variant="outline" aria-controls={listId} aria-expanded={open} className="w-54 justify-between">
         <div className="flex items-center gap-2">
           <div
             className="size-2 rounded-full bg-primary"
@@ -240,17 +229,18 @@ function RiskViewSelect() {
           {riskViews.find((view) => view.value === value)?.label}
         </div>
         <ChevronsUpDown className="opacity-50" />
-      </PopoverTrigger>
-      <PopoverContent className="w-54 p-0">
+      </Button>
+      <Popover className="w-54 p-0">
         <Command>
           <CommandList id={listId}>
             <CommandGroup>
               {riskViews.map((view) => (
                 <CommandItem
                   key={view.value}
-                  value={view.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
+                  id={view.value}
+                  textValue={`${view.label} ${view.description}`}
+                  onAction={() => {
+                    setValue(view.value);
                     setOpen(false);
                   }}
                 >
@@ -264,8 +254,8 @@ function RiskViewSelect() {
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
-    </Popover>
+      </Popover>
+    </PopoverTrigger>
   );
 }
 
@@ -281,14 +271,14 @@ function FiltersPopover({
 
   return (
     <div className="flex items-center gap-2">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger render={<Button variant="outline" aria-expanded={open} />}>
+      <PopoverTrigger isOpen={open} onOpenChange={setOpen}>
+        <Button variant="outline" aria-expanded={open}>
           Filters
           <Badge className="tabular-nums" variant="secondary">
             {activeCount}
           </Badge>
-        </PopoverTrigger>
-        <PopoverContent align="start" className="w-72">
+        </Button>
+        <Popover placement="bottom start" className="w-72">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm">Filters</h3>
@@ -308,8 +298,8 @@ function FiltersPopover({
               ))}
             </div>
           </div>
-        </PopoverContent>
-      </Popover>
+        </Popover>
+      </PopoverTrigger>
 
       <span className="text-muted-foreground text-sm">
         Showing: <span className="font-medium">{summarizeFilterState(selectedFilters)}</span>
@@ -330,12 +320,12 @@ function FilterToggle({
   onCheckedChange: (checked: boolean) => void;
 }) {
   return (
-    <div className="flex cursor-pointer items-center gap-2">
-      <Checkbox id={id} checked={checked} onCheckedChange={(value) => onCheckedChange(Boolean(value))} />
-      <Label htmlFor={id} className="cursor-pointer font-normal text-sm">
+    <Field orientation="horizontal" className="cursor-pointer gap-2">
+      <Checkbox id={id} isSelected={checked} onChange={onCheckedChange} />
+      <FieldLabel htmlFor={id} className="cursor-pointer font-normal text-sm">
         {label}
-      </Label>
-    </div>
+      </FieldLabel>
+    </Field>
   );
 }
 

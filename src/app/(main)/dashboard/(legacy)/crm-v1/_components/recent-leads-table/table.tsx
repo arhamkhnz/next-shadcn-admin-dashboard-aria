@@ -27,9 +27,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -82,6 +81,9 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+  const toggleableColumns = table
+    .getAllColumns()
+    .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide());
 
   return (
     <Card>
@@ -90,30 +92,34 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
         <CardDescription>Track and manage your latest leads and their status.</CardDescription>
         <CardAction>
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
+            <DropdownMenuTrigger>
+              <Button variant="outline" size="sm">
                 <Settings2 data-icon="inline-start" />
                 View
                 <ChevronDownIcon data-icon="inline-end" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-36">
+              </Button>
+              <DropdownMenu
+                placement="bottom end"
+                className="w-36"
+                selectionMode="multiple"
+                selectedKeys={toggleableColumns.filter((column) => column.getIsVisible()).map((column) => column.id)}
+                onSelectionChange={(keys) => {
+                  if (keys === "all") return;
+                  toggleableColumns.forEach((column) => {
+                    column.toggleVisibility(keys.has(column.id));
+                  });
+                }}
+              >
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-                  {table
-                    .getAllColumns()
-                    .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
-                    .map((column) => (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                      >
-                        {COLUMN_LABELS[column.id] ?? column.id}
-                      </DropdownMenuCheckboxItem>
-                    ))}
+                  {toggleableColumns.map((column) => (
+                    <DropdownMenuItem key={column.id} id={column.id}>
+                      {COLUMN_LABELS[column.id] ?? column.id}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenu>
+            </DropdownMenuTrigger>
             <Button variant="outline" size="sm">
               <Download data-icon="inline-start" />
               <span className="hidden lg:inline">Export</span>
@@ -125,32 +131,31 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
         <div className="overflow-hidden rounded-md border">
           <Table>
             <TableHeader className="bg-muted">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
+              {table.getHeaderGroups().flatMap((headerGroup) =>
+                headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    isRowHeader={
+                      header ===
+                      headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                    }
+                  >
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                )),
+              )}
+            </TableHeader>
+            <TableBody
+              className="**:data-[slot=table-cell]:first:w-8"
+              renderEmptyState={() => <div className="flex h-24 items-center justify-center">No results.</div>}
+            >
+              {table.getRowModel().rows.map((row) => (
+                <TableRow id={row.id} key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))}
-            </TableHeader>
-            <TableBody className="**:data-[slot=table-cell]:first:w-8">
-              {table.getRowModel().rows.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>
@@ -166,18 +171,17 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
               </Label>
               <Select
                 value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value) => {
-                  table.setPageSize(Number(value));
+                onChange={(key) => {
+                  if (key != null) table.setPageSize(Number(key));
                 }}
-                items={pageSizeItems}
               >
                 <SelectTrigger size="sm" className="w-20" id="recent-leads-rows-per-page">
-                  <SelectValue placeholder={table.getState().pagination.pageSize} />
+                  <SelectValue />
                 </SelectTrigger>
-                <SelectContent side="top">
+                <SelectContent placement="top">
                   <SelectGroup>
                     {pageSizeItems.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} id={item.value}>
                         {item.label}
                       </SelectItem>
                     ))}
@@ -192,8 +196,8 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
               <Button
                 variant="outline"
                 className="hidden h-8 w-8 p-0 lg:flex"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
+                onPress={() => table.setPageIndex(0)}
+                isDisabled={!table.getCanPreviousPage()}
               >
                 <span className="sr-only">Go to first page</span>
                 <ChevronsLeftIcon />
@@ -202,8 +206,8 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
                 variant="outline"
                 size="icon"
                 className="size-8"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
+                onPress={() => table.previousPage()}
+                isDisabled={!table.getCanPreviousPage()}
               >
                 <span className="sr-only">Go to previous page</span>
                 <ChevronLeftIcon />
@@ -212,8 +216,8 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
                 variant="outline"
                 size="icon"
                 className="size-8"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
+                onPress={() => table.nextPage()}
+                isDisabled={!table.getCanNextPage()}
               >
                 <span className="sr-only">Go to next page</span>
                 <ChevronRightIcon />
@@ -222,8 +226,8 @@ export function RecentLeadsTable({ data }: { data: RecentLeadRow[] }) {
                 variant="outline"
                 size="icon"
                 className="hidden size-8 lg:flex"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
+                onPress={() => table.setPageIndex(table.getPageCount() - 1)}
+                isDisabled={!table.getCanNextPage()}
               >
                 <span className="sr-only">Go to last page</span>
                 <ChevronsRightIcon />

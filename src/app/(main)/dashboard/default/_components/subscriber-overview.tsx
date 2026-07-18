@@ -19,7 +19,7 @@ export function SubscriberOverview() {
         <CardDescription>Recent customer records with plan, billing, status, and signup activity.</CardDescription>
         <CardAction>
           <Button variant="outline" size="sm">
-            <Download />
+            <Download data-icon="inline-start" />
             Export
           </Button>
         </CardAction>

@@ -21,14 +21,20 @@ export function InvoiceAdjustments() {
           render={({ field }) => (
             <Field className="gap-1">
               <FieldLabel className="text-xs">Tax</FieldLabel>
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select
+                placeholder="Select tax"
+                value={field.value}
+                onChange={(key) => {
+                  if (key != null) field.onChange(key);
+                }}
+              >
                 <SelectTrigger className="h-10 w-full">
-                  <SelectValue placeholder="Select tax" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {invoiceTaxOptions.map((taxOption) => (
-                      <SelectItem key={taxOption.id} value={taxOption.id}>
+                      <SelectItem key={taxOption.id} id={taxOption.id}>
                         {taxOption.name} ({taxOption.rate}%)
                       </SelectItem>
                     ))}
@@ -46,14 +52,20 @@ export function InvoiceAdjustments() {
             render={({ field }) => (
               <Field className="gap-1">
                 <FieldLabel className="text-xs">Discount</FieldLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  placeholder="Discount type"
+                  value={field.value}
+                  onChange={(key) => {
+                    if (key != null) field.onChange(key);
+                  }}
+                >
                   <SelectTrigger className="h-10 w-full">
-                    <SelectValue placeholder="Discount type" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="fixed">Fixed amount</SelectItem>
-                      <SelectItem value="percent">Percent</SelectItem>
+                      <SelectItem id="fixed">Fixed amount</SelectItem>
+                      <SelectItem id="percent">Percent</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

@@ -44,16 +44,16 @@ export function CashFlowOverview() {
         <CardTitle>Cash Flow Overview</CardTitle>
         <CardDescription>Monthly income and expenses with net cash impact.</CardDescription>
         <CardAction>
-          <Select defaultValue="this-year">
+          <Select defaultValue="this-year" placeholder="Select period">
             <SelectTrigger size="sm" className="w-37">
-              <SelectValue placeholder="Select period" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="this-month">This Month</SelectItem>
-                <SelectItem value="last-6-months">Last 6 Months</SelectItem>
-                <SelectItem value="ytd">Year to Date</SelectItem>
-                <SelectItem value="this-year">This Year</SelectItem>
+                <SelectItem id="this-month">This Month</SelectItem>
+                <SelectItem id="last-6-months">Last 6 Months</SelectItem>
+                <SelectItem id="ytd">Year to Date</SelectItem>
+                <SelectItem id="this-year">This Year</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

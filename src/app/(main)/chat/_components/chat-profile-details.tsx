@@ -44,7 +44,7 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
           <div className="truncate text-muted-foreground text-xs">{contact.role}</div>
         </div>
 
-        <Button variant="ghost" size="icon-sm" aria-label="Close profile" onClick={onClose}>
+        <Button variant="ghost" size="icon-sm" aria-label="Close profile" onPress={onClose}>
           <X />
         </Button>
       </div>
@@ -67,11 +67,11 @@ export function ChatProfileDetails({ contact, onClose }: ChatProfileDetailsProps
         </Button>
       </div>
 
-      <Tabs defaultValue="details">
+      <Tabs defaultSelectedKey="details">
         <TabsList variant="line" className="w-full justify-between border-b px-0 **:data-[slot=tabs-trigger]:flex-1">
-          <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="files">Files</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger id="details">Details</TabsTrigger>
+          <TabsTrigger id="files">Files</TabsTrigger>
+          <TabsTrigger id="activity">Activity</TabsTrigger>
         </TabsList>
       </Tabs>
 

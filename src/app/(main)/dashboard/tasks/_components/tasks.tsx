@@ -38,7 +38,7 @@ interface TasksProps {
   data: Task[];
 }
 
-function preventPaginationNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
+function preventPaginationNavigation(event: { preventDefault(): void }) {
   event.preventDefault();
 }
 
@@ -98,38 +98,36 @@ export function Tasks({ data }: TasksProps) {
       </div>
       <Table className="**:data-[slot=table-cell]:px-4 **:data-[slot=table-head]:px-4">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="hover:bg-transparent">
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="h-11 font-medium text-muted-foreground" colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHead>
+          {table.getHeaderGroups().flatMap((headerGroup) =>
+            headerGroup.headers.map((header) => (
+              <TableHead
+                key={header.id}
+                isRowHeader={
+                  header ===
+                  headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                }
+                className="h-11 font-medium text-muted-foreground"
+              >
+                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+              </TableHead>
+            )),
+          )}
+        </TableHeader>
+        <TableBody renderEmptyState={() => <div className="flex h-24 items-center justify-center">No results.</div>}>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow
+              id={row.id}
+              key={row.id}
+              className="border-border/60 hover:bg-muted/20"
+              data-state={row.getIsSelected() && "selected"}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id} className="py-3 align-middle">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
               ))}
             </TableRow>
           ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                className="border-border/60 hover:bg-muted/20"
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-3 align-middle">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
         </TableBody>
       </Table>
       <div className="flex flex-col gap-3 border-t px-4 py-4 md:flex-row md:items-center md:justify-between">
@@ -142,17 +140,17 @@ export function Tasks({ data }: TasksProps) {
             <p className="font-medium text-muted-foreground text-sm">Rows per page</p>
             <Select
               value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(value) => {
-                table.setPageSize(Number(value));
+              onChange={(key) => {
+                if (key != null) table.setPageSize(Number(key));
               }}
             >
               <SelectTrigger className="h-8 w-18">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue />
               </SelectTrigger>
-              <SelectContent side="top">
+              <SelectContent placement="top">
                 <SelectGroup>
                   {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                    <SelectItem key={pageSize} id={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>
                   ))}

@@ -23,12 +23,12 @@ export default function Page() {
         <p className="text-muted-foreground text-sm">{formattedDate}</p>
       </div>
 
-      <Tabs defaultValue="30-days" className="flex flex-col gap-4">
+      <Tabs defaultSelectedKey="30-days" className="flex flex-col gap-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <TabsList variant="line">
-            <TabsTrigger value="30-days">Dashboard</TabsTrigger>
-            <TabsTrigger value="12-months">Accounts</TabsTrigger>
-            <TabsTrigger value="custom">Transactions</TabsTrigger>
+            <TabsTrigger id="30-days">Dashboard</TabsTrigger>
+            <TabsTrigger id="12-months">Accounts</TabsTrigger>
+            <TabsTrigger id="custom">Transactions</TabsTrigger>
           </TabsList>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -37,7 +37,7 @@ export default function Page() {
               <span>Updated 5 min ago</span>
             </div>
             <Button size="sm" variant="outline">
-              <Settings2 />
+              <Settings2 data-icon="inline-start" />
               Settings
             </Button>
             <Button size="sm" variant="outline">
@@ -47,7 +47,7 @@ export default function Page() {
           </div>
         </div>
 
-        <TabsContent value="30-days" className="flex flex-col gap-4">
+        <TabsContent id="30-days" className="flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
             <div className="xl:col-span-6">
               <OverviewKpis />
@@ -81,13 +81,13 @@ export default function Page() {
           </div>
         </TabsContent>
 
-        <TabsContent value="12-months">
+        <TabsContent id="12-months">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Accounts view coming soon.
           </div>
         </TabsContent>
 
-        <TabsContent value="custom">
+        <TabsContent id="custom">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Transactions view coming soon.
           </div>

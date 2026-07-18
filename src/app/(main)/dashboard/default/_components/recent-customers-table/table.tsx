@@ -28,13 +28,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -150,126 +144,149 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               }}
             />
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
-              <UsersRound />
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="sm">
+              <UsersRound data-icon="inline-start" />
               Status
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-35" align="start">
-              <DropdownMenuRadioGroup
-                value={statusFilter}
-                onValueChange={(value) => {
-                  table.getColumn("status")?.setFilterValue(value === "all" ? undefined : value);
-                  table.setPageIndex(0);
-                }}
-              >
+            </Button>
+            <DropdownMenu
+              className="w-35"
+              placement="bottom start"
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={[statusFilter]}
+              onSelectionChange={(keys) => {
+                if (keys === "all") return;
+                const [value] = keys;
+                if (value == null) return;
+                table.getColumn("status")?.setFilterValue(value === "all" ? undefined : value);
+                table.setPageIndex(0);
+              }}
+            >
+              <DropdownMenuGroup>
                 {statusOptions.map((status) => (
-                  <DropdownMenuRadioItem key={status.value} value={status.value}>
+                  <DropdownMenuItem key={status.value} id={status.value}>
                     {status.label}
-                  </DropdownMenuRadioItem>
+                  </DropdownMenuItem>
                 ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
-              <CalendarDays />
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="sm">
+              <CalendarDays data-icon="inline-start" />
               Joined date
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40" align="start">
-              <DropdownMenuRadioGroup
-                value={joinedDateFilter}
-                onValueChange={(value) => {
-                  table.getColumn("joinedWindow")?.setFilterValue(value === "all" ? undefined : value);
-                  table.setPageIndex(0);
-                }}
-              >
+            </Button>
+            <DropdownMenu
+              className="w-40"
+              placement="bottom start"
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={[joinedDateFilter]}
+              onSelectionChange={(keys) => {
+                if (keys === "all") return;
+                const [value] = keys;
+                if (value == null) return;
+                table.getColumn("joinedWindow")?.setFilterValue(value === "all" ? undefined : value);
+                table.setPageIndex(0);
+              }}
+            >
+              <DropdownMenuGroup>
                 {joinedDateOptions.map((option) => (
-                  <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  <DropdownMenuItem key={option.value} id={option.value}>
                     {option.label}
-                  </DropdownMenuRadioItem>
+                  </DropdownMenuItem>
                 ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center xl:w-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
-              <CreditCard />
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="sm">
+              <CreditCard data-icon="inline-start" />
               Billing
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuRadioGroup
-                value={billingFilter}
-                onValueChange={(value) => {
-                  table.getColumn("billing")?.setFilterValue(value === "all" ? undefined : value);
-                  table.setPageIndex(0);
-                }}
-              >
+            </Button>
+            <DropdownMenu
+              placement="bottom end"
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={[billingFilter]}
+              onSelectionChange={(keys) => {
+                if (keys === "all") return;
+                const [value] = keys;
+                if (value == null) return;
+                table.getColumn("billing")?.setFilterValue(value === "all" ? undefined : value);
+                table.setPageIndex(0);
+              }}
+            >
+              <DropdownMenuGroup>
                 {billingOptions.map((billing) => (
-                  <DropdownMenuRadioItem key={billing.value} value={billing.value}>
+                  <DropdownMenuItem key={billing.value} id={billing.value}>
                     {billing.label}
-                  </DropdownMenuRadioItem>
+                  </DropdownMenuItem>
                 ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="sm" />}>
-              <ArrowUpDown />
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="sm">
+              <ArrowUpDown data-icon="inline-start" />
               Sort
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuRadioGroup
-                value={sortValue}
-                onValueChange={(value) => {
-                  table.setSorting(sortOptionState[value as keyof typeof sortOptionState] ?? sortOptionState.newest);
-                  table.setPageIndex(0);
-                }}
-              >
+            </Button>
+            <DropdownMenu
+              placement="bottom end"
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={[sortValue]}
+              onSelectionChange={(keys) => {
+                if (keys === "all") return;
+                const [value] = keys;
+                if (value == null) return;
+                table.setSorting(sortOptionState[value as keyof typeof sortOptionState] ?? sortOptionState.newest);
+                table.setPageIndex(0);
+              }}
+            >
+              <DropdownMenuGroup>
                 {sortOptions.map((option) => (
-                  <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  <DropdownMenuItem key={option.value} id={option.value}>
                     {option.label}
-                  </DropdownMenuRadioItem>
+                  </DropdownMenuItem>
                 ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuGroup>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
         </div>
       </div>
 
       <div className="overflow-hidden rounded-lg border bg-card">
         <Table>
           <TableHeader className="bg-muted/15">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan} className="h-11 p-3 font-medium">
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
+            {table.getHeaderGroups().flatMap((headerGroup) =>
+              headerGroup.headers.map((header) => (
+                <TableHead
+                  key={header.id}
+                  isRowHeader={
+                    header ===
+                    headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                  }
+                  className="h-11 p-3 font-medium"
+                >
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHead>
+              )),
+            )}
+          </TableHeader>
+          <TableBody renderEmptyState={() => <div className="flex h-24 items-center justify-center">No results.</div>}>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow id={row.id} key={row.id} data-state={row.getIsSelected() && "selected"}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="p-3 align-middle">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-3 align-middle">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </div>
@@ -286,18 +303,17 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
             </Label>
             <Select
               value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(value) => {
-                table.setPageSize(Number(value));
+              onChange={(key) => {
+                if (key != null) table.setPageSize(Number(key));
               }}
-              items={pageSizeItems}
             >
               <SelectTrigger size="sm" className="w-20" id="recent-customers-rows-per-page">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                <SelectValue />
               </SelectTrigger>
-              <SelectContent side="top">
+              <SelectContent placement="top">
                 <SelectGroup>
                   {pageSizeItems.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <SelectItem key={item.value} id={item.value}>
                       {item.label}
                     </SelectItem>
                   ))}
@@ -313,8 +329,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               variant="outline"
               className="hidden size-8 lg:flex"
               size="icon"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
+              onPress={() => table.setPageIndex(0)}
+              isDisabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to first page</span>
               <ChevronsLeft className="size-4" />
@@ -323,8 +339,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               variant="outline"
               className="size-8"
               size="icon"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onPress={() => table.previousPage()}
+              isDisabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to previous page</span>
               <ChevronLeft className="size-4" />
@@ -333,8 +349,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               variant="outline"
               className="size-8"
               size="icon"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onPress={() => table.nextPage()}
+              isDisabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to next page</span>
               <ChevronRight className="size-4" />
@@ -343,8 +359,8 @@ export function RecentCustomersTable({ data }: { data: RecentCustomerRow[] }) {
               variant="outline"
               className="hidden size-8 lg:flex"
               size="icon"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
+              onPress={() => table.setPageIndex(table.getPageCount() - 1)}
+              isDisabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to last page</span>
               <ChevronsRight className="size-4" />

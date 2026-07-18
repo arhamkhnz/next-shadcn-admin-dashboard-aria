@@ -1,6 +1,9 @@
 "use client";
 "use no memo";
 
+import type * as React from "react";
+
+import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
@@ -24,7 +27,7 @@ import {
 } from "@/components/ui/drawer";
 import {
   DropdownMenu,
-  DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -83,11 +86,18 @@ const reviewerItems = [
 
 const assignReviewerItems = reviewerItems.slice(0, 2);
 
-function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({ id });
-
+function DragHandle({
+  attributes,
+  listeners,
+  setActivatorNodeRef,
+}: {
+  attributes: DraggableAttributes;
+  listeners: DraggableSyntheticListeners;
+  setActivatorNodeRef: (element: HTMLElement | null) => void;
+}) {
   return (
     <Button
+      ref={setActivatorNodeRef}
       {...attributes}
       {...listeners}
       variant="ghost"
@@ -174,14 +184,14 @@ function ProposalSectionDetailViewer({ item }: { item: ProposalSectionsRow }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="type">Type</Label>
-                <Select defaultValue={item.type} items={sectionTypeItems}>
+                <Select defaultValue={item.type} placeholder="Select a type">
                   <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select a type" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {sectionTypeItems.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
+                        <SelectItem key={type.value} id={type.value}>
                           {type.label}
                         </SelectItem>
                       ))}
@@ -191,14 +201,14 @@ function ProposalSectionDetailViewer({ item }: { item: ProposalSectionsRow }) {
               </div>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="status">Status</Label>
-                <Select defaultValue={item.status} items={sectionStatusItems}>
+                <Select defaultValue={item.status} placeholder="Select a status">
                   <SelectTrigger id="status" className="w-full">
-                    <SelectValue placeholder="Select a status" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {sectionStatusItems.map((status) => (
-                        <SelectItem key={status.value} value={status.value}>
+                        <SelectItem key={status.value} id={status.value}>
                           {status.label}
                         </SelectItem>
                       ))}
@@ -219,14 +229,14 @@ function ProposalSectionDetailViewer({ item }: { item: ProposalSectionsRow }) {
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="reviewer">Reviewer</Label>
-              <Select defaultValue={item.reviewer} items={reviewerItems}>
+              <Select defaultValue={item.reviewer} placeholder="Select a reviewer">
                 <SelectTrigger id="reviewer" className="w-full">
-                  <SelectValue placeholder="Select a reviewer" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {reviewerItems.map((reviewer) => (
-                      <SelectItem key={reviewer.value} value={reviewer.value}>
+                      <SelectItem key={reviewer.value} id={reviewer.value}>
                         {reviewer.label}
                       </SelectItem>
                     ))}
@@ -260,7 +270,7 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
   {
     id: "drag",
     header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
+    cell: () => null,
     enableSorting: false,
     enableHiding: false,
   },
@@ -269,19 +279,17 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
     header: ({ table }) => (
       <div className="flex items-center justify-center">
         <Checkbox
-          checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          slot={null}
+          isSelected={table.getIsAllPageRowsSelected()}
+          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+          onChange={table.toggleAllPageRowsSelected}
           aria-label="Select all"
         />
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <Checkbox slot={null} isSelected={row.getIsSelected()} onChange={row.toggleSelected} aria-label="Select row" />
       </div>
     ),
     enableSorting: false,
@@ -365,18 +373,18 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
           <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
             Reviewer
           </Label>
-          <Select items={assignReviewerItems}>
+          <Select placeholder="Assign reviewer">
             <SelectTrigger
               id={`${row.original.id}-reviewer`}
               className="w-38 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate"
               size="sm"
             >
-              <SelectValue placeholder="Assign reviewer" />
+              <SelectValue />
             </SelectTrigger>
-            <SelectContent align="end">
+            <SelectContent placement="bottom end">
               <SelectGroup>
                 {assignReviewerItems.map((reviewer) => (
-                  <SelectItem key={reviewer.value} value={reviewer.value}>
+                  <SelectItem key={reviewer.value} id={reviewer.value}>
                     {reviewer.label}
                   </SelectItem>
                 ))}
@@ -390,40 +398,41 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
   {
     id: "actions",
     cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              variant="ghost"
-              className="flex size-8 text-muted-foreground data-popup-open:bg-muted"
-              size="icon"
-            />
-          }
-        >
+      <DropdownMenuTrigger>
+        <Button variant="ghost" className="flex size-8 text-muted-foreground aria-expanded:bg-muted" size="icon">
           <EllipsisVerticalIcon />
           <span className="sr-only">Open menu</span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
+        </Button>
+        <DropdownMenu placement="bottom end" className="w-32">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Make a copy</DropdownMenuItem>
+            <DropdownMenuItem>Favorite</DropdownMenuItem>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <DropdownMenuGroup>
+            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenu>
+      </DropdownMenuTrigger>
     ),
     enableSorting: false,
   },
 ];
 
+const DraggableTableRow = TableRow as React.ComponentType<
+  React.ComponentProps<typeof TableRow> & React.RefAttributes<HTMLDivElement | HTMLTableRowElement>
+>;
+
 export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSectionsRow> }) {
-  const { transform, transition, setNodeRef, isDragging } = useSortable({
+  const { attributes, listeners, setActivatorNodeRef, transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   });
 
   return (
-    <TableRow
+    <DraggableTableRow
       ref={setNodeRef}
+      id={row.id}
       data-state={row.getIsSelected() && "selected"}
       data-dragging={isDragging}
       className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
@@ -433,8 +442,14 @@ export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSection
       }}
     >
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+        <TableCell key={cell.id}>
+          {cell.column.id === "drag" ? (
+            <DragHandle attributes={attributes} listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
+          ) : (
+            flexRender(cell.column.columnDef.cell, cell.getContext())
+          )}
+        </TableCell>
       ))}
-    </TableRow>
+    </DraggableTableRow>
   );
 }

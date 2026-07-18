@@ -113,19 +113,21 @@ export function RecentOrders() {
       <CardContent className="flex flex-col gap-4 px-0">
         <div className="flex items-center justify-between px-4">
           <ToggleGroup
-            className="bg-muted p-0.75 text-muted-foreground **:data-[slot=toggle-group-item]:rounded-md **:data-[slot=toggle-group-item]:border **:data-[slot=toggle-group-item]:border-transparent **:data-[slot=toggle-group-item]:text-foreground/60 **:data-[slot=toggle-group-item]:hover:text-foreground [&_[data-slot=toggle-group-item][data-pressed]]:bg-background [&_[data-slot=toggle-group-item][data-pressed]]:text-foreground [&_[data-slot=toggle-group-item][data-pressed]]:shadow-sm dark:[&_[data-slot=toggle-group-item][data-pressed]]:border-input dark:[&_[data-slot=toggle-group-item][data-pressed]]:bg-input/30"
-            onValueChange={(value) => {
-              const filter = value[0] as OrderFilter | undefined;
-              if (!filter) return;
+            className="bg-muted p-0.75 text-muted-foreground **:data-[slot=toggle-group-item]:rounded-md **:data-[slot=toggle-group-item]:border **:data-[slot=toggle-group-item]:border-transparent **:data-[slot=toggle-group-item]:text-foreground/60 **:data-[slot=toggle-group-item]:hover:text-foreground [&_[data-slot=toggle-group-item][data-selected]]:bg-background [&_[data-slot=toggle-group-item][data-selected]]:text-foreground [&_[data-slot=toggle-group-item][data-selected]]:shadow-sm dark:[&_[data-slot=toggle-group-item][data-selected]]:border-input dark:[&_[data-slot=toggle-group-item][data-selected]]:bg-input/30"
+            onSelectionChange={(keys) => {
+              const [selectedKey] = keys;
+              if (!selectedKey) return;
+              const filter = selectedKey as OrderFilter;
               table.getColumn("statusSummary")?.setFilterValue(filter === "All" ? undefined : filter);
               table.setPageIndex(0);
             }}
             size="sm"
             spacing={1}
-            value={[activeFilter]}
+            selectedKeys={[activeFilter]}
+            selectionMode="single"
           >
             {orderFilters.map((filter) => (
-              <ToggleGroupItem key={filter} value={filter}>
+              <ToggleGroupItem key={filter} id={filter}>
                 {filter}
               </ToggleGroupItem>
             ))}
@@ -134,7 +136,7 @@ export function RecentOrders() {
           <Button
             size="icon-sm"
             variant="outline"
-            onClick={() => table.getColumn("date")?.toggleSorting(table.getColumn("date")?.getIsSorted() === "asc")}
+            onPress={() => table.getColumn("date")?.toggleSorting(table.getColumn("date")?.getIsSorted() === "asc")}
           >
             <ArrowUpDown />
           </Button>
@@ -143,32 +145,31 @@ export function RecentOrders() {
         <div className="overflow-hidden">
           <Table className="**:data-[slot='table-cell']:px-4.5 **:data-[slot='table-head']:px-4.5">
             <TableHeader className="border-t **:data-[slot='table-head']:h-11 **:data-[slot='table-head']:font-normal **:data-[slot='table-head']:text-foreground **:data-[slot='table-head']:text-sm">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
+              {table.getHeaderGroups().flatMap((headerGroup) =>
+                headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    isRowHeader={
+                      header ===
+                      headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                    }
+                  >
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                )),
+              )}
+            </TableHeader>
+            <TableBody
+              className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-cell']:px-4 **:data-[slot='table-cell']:py-3 **:data-[slot='table-row']:hover:bg-transparent"
+              renderEmptyState={() => <div className="flex h-24 items-center justify-center">No orders found.</div>}
+            >
+              {table.getRowModel().rows.map((row) => (
+                <TableRow id={row.id} key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))}
-            </TableHeader>
-            <TableBody className="**:data-[slot='table-row']:border-border/50 **:data-[slot='table-cell']:px-4 **:data-[slot='table-cell']:py-3 **:data-[slot='table-row']:hover:bg-transparent">
-              {table.getRowModel().rows.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell className="h-24 text-center" colSpan={table.getVisibleLeafColumns().length}>
-                    No orders found.
-                  </TableCell>
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>

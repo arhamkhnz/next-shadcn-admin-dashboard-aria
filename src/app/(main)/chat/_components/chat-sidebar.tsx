@@ -7,7 +7,6 @@ import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -100,14 +99,10 @@ export function ChatSidebar() {
         <Separator />
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  />
-                }
+            <DropdownMenuTrigger>
+              <SidebarMenuButton
+                size="lg"
+                className="aria-expanded:bg-sidebar-accent aria-expanded:text-sidebar-accent-foreground"
               >
                 <Avatar>
                   <AvatarFallback className="text-xs">{getInitials(currentUser.name)}</AvatarFallback>
@@ -116,22 +111,21 @@ export function ChatSidebar() {
                   <span className="truncate font-medium">{currentUser.name}</span>
                   <span className="truncate text-muted-foreground text-xs">{currentUser.email}</span>
                 </div>
-                <EllipsisVertical className="ml-auto size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56" side="top">
-                <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar>
-                      <AvatarFallback className="text-xs">{getInitials(currentUser.name)}</AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">{currentUser.name}</span>
-                      <span className="truncate text-muted-foreground text-xs">{currentUser.email}</span>
-                    </div>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <EllipsisVertical className="ml-auto" />
+              </SidebarMenuButton>
+              <DropdownMenu className="w-(--trigger-width) min-w-56" placement="top">
                 <DropdownMenuGroup>
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                      <Avatar>
+                        <AvatarFallback className="text-xs">{getInitials(currentUser.name)}</AvatarFallback>
+                      </Avatar>
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-medium">{currentUser.name}</span>
+                        <span className="truncate text-muted-foreground text-xs">{currentUser.email}</span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
                   <DropdownMenuItem>
                     <UserRound />
                     Account
@@ -142,12 +136,14 @@ export function ChatSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <LogOut />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenu>
+            </DropdownMenuTrigger>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

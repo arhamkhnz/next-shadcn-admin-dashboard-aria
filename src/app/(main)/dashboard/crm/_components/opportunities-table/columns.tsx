@@ -36,15 +36,18 @@ export const opportunitiesColumns: ColumnDef<OpportunityRow>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        slot={null}
+        isSelected={table.getIsAllPageRowsSelected()}
+        isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+        onChange={table.toggleAllPageRowsSelected}
         aria-label="Select all opportunities"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        slot={null}
+        isSelected={row.getIsSelected()}
+        onChange={row.toggleSelected}
         aria-label={`Select ${row.original.account}`}
       />
     ),

@@ -1,8 +1,6 @@
 "use client";
 "use no memo";
 
-import type { MouseEvent } from "react";
-
 import { flexRender, type Table as TableType } from "@tanstack/react-table";
 
 import {
@@ -20,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 import type { UserRow } from "./data";
 
-function preventPaginationNavigation(event: MouseEvent<HTMLAnchorElement>) {
+function preventPaginationNavigation(event: { preventDefault(): void }) {
   event.preventDefault();
 }
 
@@ -39,46 +37,42 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
   const pageCount = Math.max(table.getPageCount(), 1);
   const currentPage = Math.min(table.getState().pagination.pageIndex + 1, pageCount);
   const pageNumbers = getPageNumbers(currentPage, pageCount);
-  const rowsPerPage = `${table.getState().pagination.pageSize}`;
-
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div>
         <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4">
           <TableHeader className="[&_tr]:border-t">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="py-4 font-normal">
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
+            {table.getHeaderGroups().flatMap((headerGroup) =>
+              headerGroup.headers.map((header) => (
+                <TableHead
+                  key={header.id}
+                  isRowHeader={
+                    header ===
+                    headerGroup.headers.find((candidate) => !["select", "actions"].includes(candidate.column.id))
+                  }
+                  className="py-4 font-normal"
+                >
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHead>
+              )),
+            )}
+          </TableHeader>
+
+          <TableBody renderEmptyState={() => <div className="flex h-24 items-center justify-center">No results.</div>}>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow
+                id={row.id}
+                key={row.id}
+                className="border-border/60 hover:bg-white/2.5"
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} className="px-3 py-4 align-middle">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}
-          </TableHeader>
-
-          <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  className="border-border/60 hover:bg-white/2.5"
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="px-3 py-4 align-middle">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
           </TableBody>
         </Table>
       </div>
@@ -91,15 +85,17 @@ export function UsersTable({ table }: { table: TableType<UserRow> }) {
             <span>Rows per page</span>
             <Select
               value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(value) => table.setPageSize(Number(value))}
+              onChange={(key) => {
+                if (key != null) table.setPageSize(Number(key));
+              }}
             >
               <SelectTrigger size="sm" className="w-20" id="users-rows-per-page">
-                <SelectValue placeholder={rowsPerPage} />
+                <SelectValue />
               </SelectTrigger>
-              <SelectContent side="top">
+              <SelectContent placement="top">
                 <SelectGroup>
                   {[10, 20, 30, 40, 50].map((pageSize) => (
-                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                    <SelectItem key={pageSize} id={`${pageSize}`}>
                       {pageSize}
                     </SelectItem>
                   ))}

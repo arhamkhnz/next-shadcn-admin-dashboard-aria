@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ExternalLink } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -14,16 +14,16 @@ export default function Page() {
             This iframe shows the standalone chat screen. Open it in full screen for a better view.
           </p>
         </div>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          nativeButton={false}
-          render={
-            <Link href="/chat" target="_blank" rel="noreferrer" prefetch={false} aria-label="Open chat in new tab" />
-          }
+        <Link
+          href="/chat"
+          target="_blank"
+          rel="noreferrer"
+          prefetch={false}
+          aria-label="Open chat in new tab"
+          className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
         >
           <ExternalLink />
-        </Button>
+        </Link>
       </div>
 
       <iframe src="/chat" title="Chat preview" className="min-h-0 flex-1 rounded-lg border bg-background" />

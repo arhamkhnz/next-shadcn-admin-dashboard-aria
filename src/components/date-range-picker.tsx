@@ -2,12 +2,17 @@
 
 import * as React from "react";
 
+import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
 import { format, subDays } from "date-fns";
-import type { DateRange } from "react-day-picker";
 
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RangeCalendar } from "@/components/ui/calendar";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+
+export interface DateRange {
+  from?: Date;
+  to?: Date;
+}
 
 interface DateRangePickerProps {
   value?: DateRange;
@@ -39,24 +44,36 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
     onChange?.(nextValue);
   };
 
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        render={
-          <Button variant="outline" id="date" className="font-normal">
-            {dateRangeLabel}
-          </Button>
+  const calendarValue =
+    dateRange?.from && dateRange.to
+      ? {
+          start: toCalendarDate(dateRange.from),
+          end: toCalendarDate(dateRange.to),
         }
-      />
-      <PopoverContent className="w-auto overflow-hidden p-0" align="end">
-        <Calendar
-          mode="range"
-          defaultMonth={dateRange?.from}
-          selected={dateRange}
-          onSelect={handleDateChange}
+      : null;
+
+  return (
+    <PopoverTrigger isOpen={open} onOpenChange={setOpen}>
+      <Button variant="outline" id="date" className="font-normal">
+        {dateRangeLabel}
+      </Button>
+      <Popover className="w-auto overflow-hidden p-0" placement="bottom end">
+        <RangeCalendar
+          value={calendarValue}
+          onChange={(nextValue) => {
+            const timeZone = getLocalTimeZone();
+            handleDateChange({
+              from: nextValue.start.toDate(timeZone),
+              to: nextValue.end.toDate(timeZone),
+            });
+          }}
           numberOfMonths={2}
         />
-      </PopoverContent>
-    </Popover>
+      </Popover>
+    </PopoverTrigger>
   );
+}
+
+function toCalendarDate(date: Date) {
+  return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 }

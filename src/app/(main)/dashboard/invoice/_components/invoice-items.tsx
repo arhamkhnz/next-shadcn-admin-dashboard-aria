@@ -57,7 +57,7 @@ export function InvoiceItems() {
     <section className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-medium tracking-tight">Invoice Items</h2>
-        <Button type="button" variant="ghost" size="sm" onClick={handleAddItem}>
+        <Button type="button" variant="ghost" size="sm" onPress={handleAddItem}>
           <Plus data-icon="inline-start" />
           Add Item
         </Button>
@@ -170,7 +170,7 @@ function SortableInvoiceItemRow({
         size="icon-sm"
         className="max-md:col-start-4 max-md:row-start-2"
         aria-label={`Remove item ${index + 1}`}
-        onClick={onRemove}
+        onPress={onRemove}
       >
         <Trash2 />
       </Button>

@@ -18,10 +18,9 @@ import {
 import { SimpleIcon } from "@/components/simple-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -35,34 +34,31 @@ import type { InfrastructureEnvironment, InfrastructureGroup } from "./infrastru
 export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
   return (
     <Collapsible
-      defaultOpen
-      className="flex flex-col overflow-hidden rounded-xl border bg-card py-3 text-card-foreground data-open:gap-3 data-open:pb-0"
+      defaultExpanded
+      className="flex flex-col overflow-hidden rounded-xl border bg-card py-3 text-card-foreground data-expanded:gap-3 data-expanded:pb-0"
     >
       <div className="flex flex-col gap-2 px-4 sm:flex-row sm:items-center">
-        <CollapsibleTrigger
-          render={
-            <Button
-              variant="ghost"
-              className="group -ml-2 h-auto w-full justify-start gap-2 px-2 py-1 hover:bg-transparent aria-expanded:bg-transparent sm:flex-1"
-            />
-          }
+        <Button
+          slot="trigger"
+          variant="ghost"
+          className="group -ml-2 h-auto w-full justify-start gap-2 px-2 py-1 hover:bg-transparent aria-expanded:bg-transparent sm:flex-1"
         >
-          <ChevronDown className="group-data-panel-open:rotate-180" />
+          <ChevronDown className="transition-transform group-aria-expanded:rotate-180" />
           <div className="flex min-w-0 items-baseline gap-1.5 text-left">
             <span className="shrink-0 font-medium leading-none">{group.organization}</span>
             <span className="min-w-0 truncate text-muted-foreground text-sm">({group.name})</span>
           </div>
-        </CollapsibleTrigger>
+        </Button>
         <div className="flex w-full items-center justify-between gap-2 sm:ml-auto sm:w-auto sm:justify-end">
           <Button variant="ghost" size="sm" className="-ml-1.5 sm:ml-0">
             <Plus data-icon="inline-start" />
             Add Environment
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="icon-sm" />}>
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="icon-sm">
               <EllipsisVertical />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40" align="end">
+            </Button>
+            <DropdownMenu className="w-40" placement="bottom end">
               <DropdownMenuGroup>
                 {group.rows.length > 0 ? (
                   <DropdownMenuItem>
@@ -94,8 +90,8 @@ export function ProjectEnvironments({ group }: { group: InfrastructureGroup }) {
                   Copy Project ID
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </DropdownMenu>
+          </DropdownMenuTrigger>
         </div>
       </div>
 
@@ -110,37 +106,24 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
   return (
     <div className="scrollbar-thin overflow-x-auto [scrollbar-color:var(--border)_transparent] **:data-[slot=table-container]:overflow-visible [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
       <Table className="min-w-[1700px] table-fixed **:data-[slot='table-cell']:px-5 **:data-[slot='table-head']:px-5">
-        <colgroup>
-          <col className="w-90" />
-          <col className="w-40" />
-          <col className="w-42" />
-          <col className="w-35" />
-          <col className="w-35" />
-          <col className="w-38" />
-          <col className="w-98" />
-          <col className="w-55" />
-          <col className="w-18" />
-        </colgroup>
         <TableHeader className="bg-muted/50 [&_tr]:border-y">
-          <TableRow>
-            <TableHead className="font-medium">
-              <span className="inline-flex items-center gap-1">
-                Domain <ArrowUpDown className="size-4" />
-              </span>
-            </TableHead>
-            <TableHead>Platform</TableHead>
-            <TableHead>Environment</TableHead>
-            <TableHead>Health</TableHead>
-            <TableHead>Latency</TableHead>
-            <TableHead>Uptime</TableHead>
-            <TableHead>Resources</TableHead>
-            <TableHead>Server</TableHead>
-            <TableHead />
-          </TableRow>
+          <TableHead isRowHeader className="w-90 font-medium">
+            <span className="inline-flex items-center gap-1">
+              Domain <ArrowUpDown className="size-4" />
+            </span>
+          </TableHead>
+          <TableHead className="w-40">Platform</TableHead>
+          <TableHead className="w-42">Environment</TableHead>
+          <TableHead className="w-35">Health</TableHead>
+          <TableHead className="w-35">Latency</TableHead>
+          <TableHead className="w-38">Uptime</TableHead>
+          <TableHead className="w-98">Resources</TableHead>
+          <TableHead className="w-55">Server</TableHead>
+          <TableHead className="w-18" aria-label="Actions" />
         </TableHeader>
         <TableBody className="**:data-[slot='table-row']:hover:bg-transparent">
           {rows.map((row) => (
-            <TableRow key={row.domain}>
+            <TableRow id={row.domain} key={row.domain}>
               <TableCell>
                 <span className="block truncate font-medium" title={row.domain}>
                   {row.domain}
@@ -213,11 +196,11 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                 </span>
               </TableCell>
               <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" className="-mr-2" />}>
+                <DropdownMenuTrigger>
+                  <Button variant="ghost" size="icon-sm" className="-mr-2">
                     <SquareTerminal />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-40" align="end">
+                  </Button>
+                  <DropdownMenu className="w-40" placement="bottom end">
                     <DropdownMenuGroup>
                       <DropdownMenuItem>
                         <FileText />
@@ -239,8 +222,8 @@ function EnvironmentTable({ rows }: { rows: InfrastructureEnvironment[] }) {
                         Copy URL
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </DropdownMenu>
+                </DropdownMenuTrigger>
               </TableCell>
             </TableRow>
           ))}

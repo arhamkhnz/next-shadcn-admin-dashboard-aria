@@ -97,17 +97,17 @@ export function Roles({ roles }: { roles: Role[] }) {
         </div>
       </div>
 
-      <Tabs className="h-full gap-4" defaultValue="roles">
+      <Tabs className="h-full gap-4" defaultSelectedKey="roles">
         <TabsList
           variant="line"
           className="w-full justify-start gap-2 border-b ps-0 *:data-[slot=tabs-trigger]:flex-none"
         >
-          <TabsTrigger value="roles">Roles</TabsTrigger>
-          <TabsTrigger value="permission-sets">Permission sets</TabsTrigger>
-          <TabsTrigger value="access-reviews">Access reviews</TabsTrigger>
+          <TabsTrigger id="roles">Roles</TabsTrigger>
+          <TabsTrigger id="permission-sets">Permission sets</TabsTrigger>
+          <TabsTrigger id="access-reviews">Access reviews</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="roles">
+        <TabsContent id="roles">
           <div className="flex flex-col gap-4">
             <Alert className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50">
               <AlertTriangle className="size-4" />
@@ -141,62 +141,65 @@ export function Roles({ roles }: { roles: Role[] }) {
                 <div className="flex flex-wrap items-center gap-2">
                   <Select
                     value={typeFilter}
-                    onValueChange={(v) => {
-                      table.getColumn("group")?.setFilterValue(getRoleGroupFilterValue(v));
+                    onChange={(key) => {
+                      if (key == null) return;
+                      table.getColumn("group")?.setFilterValue(getRoleGroupFilterValue(String(key)));
                       table.setPageIndex(0);
                     }}
                   >
                     <SelectTrigger size="sm">
                       <span className="text-muted-foreground">Type:</span>
-                      <SelectValue placeholder="All" />
+                      <SelectValue />
                     </SelectTrigger>
-                    <SelectContent align="start" alignItemWithTrigger={false}>
+                    <SelectContent placement="bottom start">
                       <SelectGroup>
-                        <SelectItem value="All">All</SelectItem>
-                        <SelectItem value="System">System</SelectItem>
-                        <SelectItem value="Custom">Custom</SelectItem>
+                        <SelectItem id="All">All</SelectItem>
+                        <SelectItem id="System">System</SelectItem>
+                        <SelectItem id="Custom">Custom</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
 
                   <Select
                     value={ownerFilter}
-                    onValueChange={(v) => {
-                      table.getColumn("owner")?.setFilterValue(v === "All" ? undefined : v);
+                    onChange={(key) => {
+                      if (key == null) return;
+                      table.getColumn("owner")?.setFilterValue(key === "All" ? undefined : String(key));
                       table.setPageIndex(0);
                     }}
                   >
                     <SelectTrigger size="sm">
                       <span className="text-muted-foreground">Owner:</span>
-                      <SelectValue placeholder="All" />
+                      <SelectValue />
                     </SelectTrigger>
-                    <SelectContent align="start" alignItemWithTrigger={false}>
+                    <SelectContent placement="bottom start">
                       <SelectGroup>
-                        <SelectItem value="All">All</SelectItem>
-                        <SelectItem value="System">System</SelectItem>
-                        <SelectItem value="Jane Doe">Jane Doe</SelectItem>
-                        <SelectItem value="Alex Kim">Alex Kim</SelectItem>
-                        <SelectItem value="Chris Lee">Chris Lee</SelectItem>
+                        <SelectItem id="All">All</SelectItem>
+                        <SelectItem id="System">System</SelectItem>
+                        <SelectItem id="Jane Doe">Jane Doe</SelectItem>
+                        <SelectItem id="Alex Kim">Alex Kim</SelectItem>
+                        <SelectItem id="Chris Lee">Chris Lee</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
 
                   <Select
                     value={statusFilter}
-                    onValueChange={(v) => {
-                      table.getColumn("status")?.setFilterValue(v === "All" ? undefined : v);
+                    onChange={(key) => {
+                      if (key == null) return;
+                      table.getColumn("status")?.setFilterValue(key === "All" ? undefined : String(key));
                       table.setPageIndex(0);
                     }}
                   >
                     <SelectTrigger size="sm">
                       <span className="text-muted-foreground">Status:</span>
-                      <SelectValue placeholder="All" />
+                      <SelectValue />
                     </SelectTrigger>
-                    <SelectContent align="start" alignItemWithTrigger={false}>
+                    <SelectContent placement="bottom start">
                       <SelectGroup>
-                        <SelectItem value="All">All</SelectItem>
-                        <SelectItem value="Active">Active</SelectItem>
-                        <SelectItem value="Needs review">Needs review</SelectItem>
+                        <SelectItem id="All">All</SelectItem>
+                        <SelectItem id="Active">Active</SelectItem>
+                        <SelectItem id="Needs review">Needs review</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -207,12 +210,12 @@ export function Roles({ roles }: { roles: Role[] }) {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="permission-sets">
+        <TabsContent id="permission-sets">
           <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
             Permission Sets Coming Soon
           </div>
         </TabsContent>
-        <TabsContent value="access-reviews">
+        <TabsContent id="access-reviews">
           <div className="flex h-full items-center justify-center rounded-md border border-dashed text-muted-foreground text-sm">
             Access Reviews Coming Soon
           </div>

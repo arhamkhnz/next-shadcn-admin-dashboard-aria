@@ -7,12 +7,9 @@ import { Check, EllipsisVertical, LogOut, PenLine, Settings2, UserPlus, UsersRou
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -45,33 +42,30 @@ export function MailSidebar() {
       <SidebarHeader className="gap-3 py-3 pb-1">
         <div className="flex items-center justify-between">
           {isCollapsed ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className={accountTriggerClassName}
-                    aria-label={`Open ${selectedAccount.label} menu`}
-                  />
-                }
+            <DropdownMenuTrigger>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className={accountTriggerClassName}
+                aria-label={`Open ${selectedAccount.label} menu`}
               >
                 <AccountMarker account={selectedAccount} isSelected />
-              </DropdownMenuTrigger>
+              </Button>
               <AccountMenuContent
                 selectedAccountId={selectedAccount.id}
                 onSelectAccount={setSelectedAccount}
                 showAccounts
-                side="right"
-                align="start"
+                placement="right top"
               />
-            </DropdownMenu>
+            </DropdownMenuTrigger>
           ) : (
             <>
               <ToggleGroup
-                value={[String(selectedAccount.id)]}
-                onValueChange={(value) => {
-                  const account = accounts.find((item) => item.id === Number(value[0]));
+                selectedKeys={[String(selectedAccount.id)]}
+                selectionMode="single"
+                onSelectionChange={(keys) => {
+                  const [key] = keys;
+                  const account = accounts.find((item) => item.id === Number(key));
 
                   if (account) {
                     setSelectedAccount(account);
@@ -83,7 +77,7 @@ export function MailSidebar() {
                   <ToggleGroupItem
                     key={account.id}
                     className={accountTriggerClassName}
-                    value={String(account.id)}
+                    id={String(account.id)}
                     aria-label={`Select ${account.label}`}
                   >
                     <AccountMarker account={account} />
@@ -91,12 +85,16 @@ export function MailSidebar() {
                 ))}
               </ToggleGroup>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Open account menu" />}>
+              <DropdownMenuTrigger>
+                <Button variant="ghost" size="icon-sm" aria-label="Open account menu">
                   <EllipsisVertical />
-                </DropdownMenuTrigger>
-                <AccountMenuContent selectedAccountId={selectedAccount.id} onSelectAccount={setSelectedAccount} />
-              </DropdownMenu>
+                </Button>
+                <AccountMenuContent
+                  selectedAccountId={selectedAccount.id}
+                  onSelectAccount={setSelectedAccount}
+                  placement="bottom"
+                />
+              </DropdownMenuTrigger>
             </>
           )}
         </div>
@@ -177,57 +175,64 @@ function AccountMenuContent({
   selectedAccountId: number;
   onSelectAccount: (account: Account) => void;
   showAccounts?: boolean;
-} & Pick<React.ComponentProps<typeof DropdownMenuContent>, "align" | "side">) {
+} & Pick<React.ComponentProps<typeof DropdownMenu>, "placement">) {
   return (
-    <DropdownMenuContent className="w-56" {...props}>
+    <DropdownMenu
+      className="w-56"
+      selectionMode={showAccounts ? "single" : undefined}
+      selectedKeys={showAccounts ? [String(selectedAccountId)] : undefined}
+      onSelectionChange={
+        showAccounts
+          ? (keys) => {
+              if (keys === "all") return;
+              const [value] = keys;
+              const account = accounts.find((item) => item.id === Number(value));
+
+              if (account) {
+                onSelectAccount(account);
+              }
+            }
+          : undefined
+      }
+      {...props}
+    >
       {showAccounts && (
         <>
           <DropdownMenuGroup>
             <DropdownMenuLabel>Accounts</DropdownMenuLabel>
-            <DropdownMenuRadioGroup
-              value={String(selectedAccountId)}
-              onValueChange={(value) => {
-                const account = accounts.find((item) => item.id === Number(value));
-
-                if (account) {
-                  onSelectAccount(account);
-                }
-              }}
-            >
-              {accounts.map((account) => (
-                <DropdownMenuRadioItem key={account.id} value={String(account.id)} closeOnClick>
-                  <div className="flex min-w-0 flex-col">
-                    <span>{account.label}</span>
-                    <span className="truncate text-muted-foreground text-xs">{account.email}</span>
-                  </div>
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
+            {accounts.map((account) => (
+              <DropdownMenuItem key={account.id} id={String(account.id)} shouldCloseOnSelect>
+                <div className="flex min-w-0 flex-col">
+                  <span>{account.label}</span>
+                  <span className="truncate text-muted-foreground text-xs">{account.email}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
         </>
       )}
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem id="add-account">
           <UserPlus />
           Add account
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem id="manage-accounts">
           <UsersRound />
           Manage accounts
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem id="account-settings">
           <Settings2 />
           Account settings
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem id="sign-out">
           <LogOut />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuGroup>
-    </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

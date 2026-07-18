@@ -7,11 +7,9 @@ import { Settings2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -49,7 +47,7 @@ export function TasksToolbar<TData>({ table }: TasksToolbarProps<TData>) {
         {isFiltered && (
           <Button
             variant="destructive"
-            onClick={() => {
+            onPress={() => {
               table.resetColumnFilters();
               table.setPageIndex(0);
             }}
@@ -60,36 +58,37 @@ export function TasksToolbar<TData>({ table }: TasksToolbarProps<TData>) {
         )}
       </div>
       <div className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                variant="outline"
-                size="sm"
-                className={cn("ml-auto hidden lg:flex", hiddenColumns.length > 0 && "bg-muted text-foreground")}
-              />
-            }
+        <DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn("ml-auto hidden lg:flex", hiddenColumns.length > 0 && "bg-muted text-foreground")}
           >
             <Settings2 data-icon="inline-start" />
             View
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-38">
-            <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-            <DropdownMenuSeparator />
+          </Button>
+          <DropdownMenu
+            placement="bottom end"
+            className="w-38"
+            selectionMode="multiple"
+            selectedKeys={hideableColumns.filter((column) => column.getIsVisible()).map((column) => column.id)}
+            onSelectionChange={(keys) => {
+              if (keys === "all") return;
+              hideableColumns.forEach((column) => {
+                column.toggleVisibility(keys.has(column.id));
+              });
+            }}
+          >
             <DropdownMenuGroup>
+              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
               {hideableColumns.map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
+                <DropdownMenuItem key={column.id} id={column.id} className="capitalize">
                   {column.id}
-                </DropdownMenuCheckboxItem>
+                </DropdownMenuItem>
               ))}
             </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DropdownMenu>
+        </DropdownMenuTrigger>
       </div>
     </div>
   );

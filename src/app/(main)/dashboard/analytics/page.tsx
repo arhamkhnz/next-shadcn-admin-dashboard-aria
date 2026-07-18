@@ -20,20 +20,20 @@ export default function Page() {
         </p>
       </div>
 
-      <Tabs defaultValue="overview" className="flex flex-col gap-4">
+      <Tabs defaultSelectedKey="overview" className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <TabsList className="gap-1">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="audience">Audience</TabsTrigger>
-            <TabsTrigger value="acquisition">Acquisition</TabsTrigger>
-            <TabsTrigger value="engagement">Engagement</TabsTrigger>
-            <TabsTrigger value="conversions">Conversions</TabsTrigger>
+            <TabsTrigger id="overview">Overview</TabsTrigger>
+            <TabsTrigger id="audience">Audience</TabsTrigger>
+            <TabsTrigger id="acquisition">Acquisition</TabsTrigger>
+            <TabsTrigger id="engagement">Engagement</TabsTrigger>
+            <TabsTrigger id="conversions">Conversions</TabsTrigger>
           </TabsList>
 
           <AnalyticsToolbar />
         </div>
 
-        <TabsContent value="overview" className="flex flex-col gap-4">
+        <TabsContent id="overview" className="flex flex-col gap-4">
           <AnalyticsKpiStrip />
 
           <div className="grid grid-cols-1 items-stretch gap-4 xl:grid-cols-12">
@@ -55,25 +55,25 @@ export default function Page() {
           </div>
         </TabsContent>
 
-        <TabsContent value="audience">
+        <TabsContent id="audience">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Audience view coming soon.
           </div>
         </TabsContent>
 
-        <TabsContent value="acquisition">
+        <TabsContent id="acquisition">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Acquisition view coming soon.
           </div>
         </TabsContent>
 
-        <TabsContent value="engagement">
+        <TabsContent id="engagement">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Engagement view coming soon.
           </div>
         </TabsContent>
 
-        <TabsContent value="conversions">
+        <TabsContent id="conversions">
           <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
             Conversions view coming soon.
           </div>
