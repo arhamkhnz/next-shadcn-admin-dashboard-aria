@@ -14,7 +14,9 @@
     "generate:presets": "ts-node -P tsconfig.scripts.json src/scripts/generate-theme-presets.ts"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": ["biome check --write --no-errors-on-unmatched"]
+    "*.{js,ts,jsx,tsx}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -43,7 +45,7 @@
     "react-hook-form": "^7.83.0",
     "react-resizable-panels": "^4.12.2",
     "recharts": "^3.8.0",
-    "shadcn": "^4.15.0",
+    "shadcn": "^4.16.0",
     "simple-icons": "^16.27.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
