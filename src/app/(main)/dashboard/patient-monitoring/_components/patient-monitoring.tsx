@@ -76,7 +76,7 @@ export function PatientMonitoring({ patients }: PatientMonitoringProps) {
             <AlertAction className="top-1/2 -translate-y-1/2">
               <Button
                 className="rounded-none"
-                disabled={acknowledged}
+                isDisabled={acknowledged}
                 onPress={() => acknowledgePatient(selectedPatient.id)}
                 size="sm"
                 variant="secondary"
