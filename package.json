@@ -24,7 +24,7 @@
     "@fullcalendar/react": "^7.0.2",
     "@hookform/resolvers": "^5.7.1",
     "@internationalized/date": "^3.12.3",
-    "@shadcn/react": "^0.1.0",
+    "@shadcn/react": "^0.3.0",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
