@@ -2,8 +2,8 @@
 
 import type * as React from "react";
 
-import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
-import { useSortable } from "@dnd-kit/sortable";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
+import { useSortable } from "@dnd-kit/react/sortable";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { FlexRender, Subscribe } from "@tanstack/react-table";
 import { CircleCheckIcon, EllipsisVerticalIcon, GripVerticalIcon, LoaderIcon, TrendingUpIcon } from "lucide-react";
@@ -86,24 +86,9 @@ const reviewerItems = [
 
 const assignReviewerItems = reviewerItems.slice(0, 2);
 
-function DragHandle({
-  attributes,
-  listeners,
-  setActivatorNodeRef,
-}: {
-  attributes: DraggableAttributes;
-  listeners: DraggableSyntheticListeners;
-  setActivatorNodeRef: (element: HTMLElement | null) => void;
-}) {
+function DragHandle({ handleRef }: { handleRef: (element: Element | null) => void }) {
   return (
-    <Button
-      ref={setActivatorNodeRef}
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="size-7 text-muted-foreground hover:bg-transparent"
-    >
+    <Button ref={handleRef} variant="ghost" size="icon" className="size-7 text-muted-foreground hover:bg-transparent">
       <GripVerticalIcon />
       <span className="sr-only">Drag to reorder</span>
     </Button>
@@ -434,34 +419,33 @@ const DraggableTableRow = TableRow as React.ComponentType<
 
 export function DraggableProposalSectionsRow({
   row,
+  index,
   isSelected,
 }: {
   row: Row<DataTableFeatures, ProposalSectionsRow>;
+  index: number;
   isSelected: boolean;
 }) {
-  const { attributes, listeners, setActivatorNodeRef, transform, transition, setNodeRef, isDragging } = useSortable({
+  const { handleRef, isDragging, ref } = useSortable({
     id: row.original.id,
+    index,
+    type: "proposal-section",
+    accept: "proposal-section",
+    group: "proposal-sections",
+    modifiers: [RestrictToVerticalAxis],
   });
 
   return (
     <DraggableTableRow
-      ref={setNodeRef}
+      ref={ref}
       id={row.id}
       data-state={isSelected && "selected"}
       data-dragging={isDragging}
       className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-      style={{
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-        transition,
-      }}
     >
       {row.getVisibleCells().map((cell) => (
         <TableCell key={cell.id}>
-          {cell.column.id === "drag" ? (
-            <DragHandle attributes={attributes} listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
-          ) : (
-            <FlexRender cell={cell} />
-          )}
+          {cell.column.id === "drag" ? <DragHandle handleRef={handleRef} /> : <FlexRender cell={cell} />}
         </TableCell>
       ))}
     </DraggableTableRow>
