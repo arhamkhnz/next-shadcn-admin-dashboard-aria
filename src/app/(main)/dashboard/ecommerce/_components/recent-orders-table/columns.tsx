@@ -1,4 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { Subscribe } from "@tanstack/react-table";
 import { format, parseISO } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 
@@ -12,6 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { OrderRow } from "./schema";
 
@@ -82,28 +84,36 @@ function FulfillmentBadge({ status }: { status: OrderRow["fulfillment"] }) {
   );
 }
 
-export const recentOrdersColumns: ColumnDef<OrderRow>[] = [
+export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <div className="w-10">
-        <Checkbox
-          slot={null}
-          aria-label="Select all orders"
-          isSelected={table.getIsAllPageRowsSelected()}
-          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
-          onChange={table.toggleAllPageRowsSelected}
-        />
+        <Subscribe source={table.atoms.rowSelection}>
+          {() => (
+            <Checkbox
+              slot={null}
+              aria-label="Select all orders"
+              isSelected={table.getIsAllPageRowsSelected()}
+              isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+              onChange={table.toggleAllPageRowsSelected}
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="w-10">
-        <Checkbox
-          slot={null}
-          aria-label={`Select order ${row.original.id}`}
-          isSelected={row.getIsSelected()}
-          onChange={row.toggleSelected}
-        />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+          {(isSelected) => (
+            <Checkbox
+              slot={null}
+              aria-label={`Select order ${row.original.id}`}
+              isSelected={isSelected}
+              onChange={row.toggleSelected}
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     enableHiding: false,

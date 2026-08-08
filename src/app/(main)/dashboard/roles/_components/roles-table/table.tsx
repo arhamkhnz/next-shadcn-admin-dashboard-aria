@@ -1,9 +1,8 @@
 "use client";
-"use no memo";
 
 import { useMemo } from "react";
 
-import { flexRender, type Table as TableType } from "@tanstack/react-table";
+import type { ReactTable } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,11 +15,12 @@ import {
 } from "@/components/ui/pagination";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 import { cn } from "@/lib/utils";
 
 import type { Role } from "./data";
 
-type RoleTableRow = ReturnType<TableType<Role>["getRowModel"]>["rows"][number];
+type RoleTableRow = ReturnType<ReactTable<DataTableFeatures, Role>["getRowModel"]>["rows"][number];
 
 function groupRowsByRoleGroup(rows: RoleTableRow[]) {
   return rows.reduce(
@@ -40,8 +40,8 @@ function groupRowsByRoleGroup(rows: RoleTableRow[]) {
   );
 }
 
-export function RolesTable({ table }: { table: TableType<Role> }) {
-  const { pageIndex, pageSize } = table.getState().pagination;
+export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Role> }) {
+  const { pageIndex, pageSize } = table.state.pagination;
   const pageRows = table.getRowModel().rows;
   const filteredRows = table.getFilteredRowModel().rows;
 
@@ -67,7 +67,7 @@ export function RolesTable({ table }: { table: TableType<Role> }) {
                 style={{ width: header.getSize() }}
                 className="h-10 border-y not-last:border-r px-4 text-center font-medium text-foreground text-sm first:text-left"
               >
-                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                {header.isPlaceholder ? null : <table.FlexRender header={header} />}
               </TableHead>
             )),
           )}
@@ -104,7 +104,7 @@ export function RolesTable({ table }: { table: TableType<Role> }) {
                       index === 0 ? "text-left" : "text-center",
                     )}
                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <table.FlexRender cell={cell} />
                   </TableCell>
                 ))}
               </TableRow>

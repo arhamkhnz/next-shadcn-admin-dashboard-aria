@@ -1,12 +1,11 @@
 "use client";
-"use no memo";
 
 import type * as React from "react";
 
 import type { DraggableAttributes, DraggableSyntheticListeners } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import { flexRender } from "@tanstack/react-table";
+import { FlexRender, Subscribe } from "@tanstack/react-table";
 import { CircleCheckIcon, EllipsisVerticalIcon, GripVerticalIcon, LoaderIcon, TrendingUpIcon } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { toast } from "sonner";
@@ -38,6 +37,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Separator } from "@/components/ui/separator";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { ProposalSectionsRow } from "./schema";
 
@@ -266,7 +266,7 @@ function createInlineSaveHandler(header: string) {
   };
 }
 
-export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
+export const proposalSectionsColumns: ColumnDef<DataTableFeatures, ProposalSectionsRow>[] = [
   {
     id: "drag",
     header: () => null,
@@ -278,18 +278,26 @@ export const proposalSectionsColumns: ColumnDef<ProposalSectionsRow>[] = [
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          slot={null}
-          isSelected={table.getIsAllPageRowsSelected()}
-          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
-          onChange={table.toggleAllPageRowsSelected}
-          aria-label="Select all"
-        />
+        <Subscribe source={table.atoms.rowSelection}>
+          {() => (
+            <Checkbox
+              slot={null}
+              isSelected={table.getIsAllPageRowsSelected()}
+              isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+              onChange={table.toggleAllPageRowsSelected}
+              aria-label="Select all"
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox slot={null} isSelected={row.getIsSelected()} onChange={row.toggleSelected} aria-label="Select row" />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+          {(isSelected) => (
+            <Checkbox slot={null} isSelected={isSelected} onChange={row.toggleSelected} aria-label="Select row" />
+          )}
+        </Subscribe>
       </div>
     ),
     enableSorting: false,
@@ -424,7 +432,13 @@ const DraggableTableRow = TableRow as React.ComponentType<
   React.ComponentProps<typeof TableRow> & React.RefAttributes<HTMLDivElement | HTMLTableRowElement>
 >;
 
-export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSectionsRow> }) {
+export function DraggableProposalSectionsRow({
+  row,
+  isSelected,
+}: {
+  row: Row<DataTableFeatures, ProposalSectionsRow>;
+  isSelected: boolean;
+}) {
   const { attributes, listeners, setActivatorNodeRef, transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   });
@@ -433,7 +447,7 @@ export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSection
     <DraggableTableRow
       ref={setNodeRef}
       id={row.id}
-      data-state={row.getIsSelected() && "selected"}
+      data-state={isSelected && "selected"}
       data-dragging={isDragging}
       className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
       style={{
@@ -446,7 +460,7 @@ export function DraggableProposalSectionsRow({ row }: { row: Row<ProposalSection
           {cell.column.id === "drag" ? (
             <DragHandle attributes={attributes} listeners={listeners} setActivatorNodeRef={setActivatorNodeRef} />
           ) : (
-            flexRender(cell.column.columnDef.cell, cell.getContext())
+            <FlexRender cell={cell} />
           )}
         </TableCell>
       ))}

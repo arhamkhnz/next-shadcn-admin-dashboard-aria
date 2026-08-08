@@ -1,7 +1,7 @@
 "use client";
-"use no memo";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { Subscribe } from "@tanstack/react-table";
 import { parse } from "date-fns";
 import { Check, Clock, MoreHorizontal, X } from "lucide-react";
 
@@ -16,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 import { cn, getInitials } from "@/lib/utils";
 
 import { statusMeta, type UserRow } from "./data";
@@ -115,28 +116,36 @@ function WorkspaceCell({ workspaces }: { workspaces: string[] }) {
   );
 }
 
-export const usersColumns: ColumnDef<UserRow>[] = [
+export const usersColumns: ColumnDef<DataTableFeatures, UserRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          slot={null}
-          aria-label="Select all users"
-          isSelected={table.getIsAllPageRowsSelected()}
-          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
-          onChange={table.toggleAllPageRowsSelected}
-        />
+        <Subscribe source={table.atoms.rowSelection}>
+          {() => (
+            <Checkbox
+              slot={null}
+              aria-label="Select all users"
+              isSelected={table.getIsAllPageRowsSelected()}
+              isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+              onChange={table.toggleAllPageRowsSelected}
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          slot={null}
-          aria-label={`Select ${row.original.name}`}
-          isSelected={row.getIsSelected()}
-          onChange={row.toggleSelected}
-        />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+          {(isSelected) => (
+            <Checkbox
+              slot={null}
+              aria-label={`Select ${row.original.name}`}
+              isSelected={isSelected}
+              onChange={row.toggleSelected}
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     enableHiding: false,

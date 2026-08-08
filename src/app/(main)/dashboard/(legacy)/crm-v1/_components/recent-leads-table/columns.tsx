@@ -1,7 +1,7 @@
 "use client";
-"use no memo";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { Subscribe } from "@tanstack/react-table";
 import { EllipsisVertical } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -14,26 +14,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 
 import type { RecentLeadRow } from "./schema";
 
-export const recentLeadsColumns: ColumnDef<RecentLeadRow>[] = [
+export const recentLeadsColumns: ColumnDef<DataTableFeatures, RecentLeadRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <div className="flex items-center justify-center">
-        <Checkbox
-          slot={null}
-          isSelected={table.getIsAllPageRowsSelected()}
-          isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
-          onChange={table.toggleAllPageRowsSelected}
-          aria-label="Select all"
-        />
+        <Subscribe source={table.atoms.rowSelection}>
+          {() => (
+            <Checkbox
+              slot={null}
+              isSelected={table.getIsAllPageRowsSelected()}
+              isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+              onChange={table.toggleAllPageRowsSelected}
+              aria-label="Select all"
+            />
+          )}
+        </Subscribe>
       </div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
-        <Checkbox slot={null} isSelected={row.getIsSelected()} onChange={row.toggleSelected} aria-label="Select row" />
+        <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+          {(isSelected) => (
+            <Checkbox slot={null} isSelected={isSelected} onChange={row.toggleSelected} aria-label="Select row" />
+          )}
+        </Subscribe>
       </div>
     ),
     enableHiding: false,

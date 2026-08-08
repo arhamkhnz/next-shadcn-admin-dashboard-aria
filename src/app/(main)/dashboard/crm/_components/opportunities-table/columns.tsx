@@ -1,12 +1,13 @@
 "use client";
-"use no memo";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { Subscribe } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import type { DataTableFeatures } from "@/lib/data-table-features";
 import { cn } from "@/lib/utils";
 
 import type { OpportunityRow } from "./schema";
@@ -31,25 +32,33 @@ function getHealthScore(health: OpportunityRow["health"]) {
   }
 }
 
-export const opportunitiesColumns: ColumnDef<OpportunityRow>[] = [
+export const opportunitiesColumns: ColumnDef<DataTableFeatures, OpportunityRow>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <Checkbox
-        slot={null}
-        isSelected={table.getIsAllPageRowsSelected()}
-        isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
-        onChange={table.toggleAllPageRowsSelected}
-        aria-label="Select all opportunities"
-      />
+      <Subscribe source={table.atoms.rowSelection}>
+        {() => (
+          <Checkbox
+            slot={null}
+            isSelected={table.getIsAllPageRowsSelected()}
+            isIndeterminate={!table.getIsAllPageRowsSelected() && table.getIsSomePageRowsSelected()}
+            onChange={table.toggleAllPageRowsSelected}
+            aria-label="Select all opportunities"
+          />
+        )}
+      </Subscribe>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        slot={null}
-        isSelected={row.getIsSelected()}
-        onChange={row.toggleSelected}
-        aria-label={`Select ${row.original.account}`}
-      />
+      <Subscribe source={row.table.atoms.rowSelection} selector={(selection) => Boolean(selection?.[row.id])}>
+        {(isSelected) => (
+          <Checkbox
+            slot={null}
+            isSelected={isSelected}
+            onChange={row.toggleSelected}
+            aria-label={`Select ${row.original.account}`}
+          />
+        )}
+      </Subscribe>
     ),
     enableHiding: false,
   },
