@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { cn } from "cn"
 import {
   Dialog as DialogPrimitive,
   DialogTrigger as DialogTriggerPrimitive,
@@ -12,7 +13,6 @@ import {
   type ModalOverlayProps as ModalOverlayPrimitiveProps,
 } from "react-aria-components"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 

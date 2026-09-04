@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { cn } from "cn"
 import {
   Breadcrumb as BreadcrumbPrimitive,
   Breadcrumbs as BreadcrumbsPrimitive,
@@ -10,8 +11,6 @@ import {
   type BreadcrumbsProps,
   type LinkProps,
 } from "react-aria-components"
-
-import { cn } from "@/lib/utils"
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {

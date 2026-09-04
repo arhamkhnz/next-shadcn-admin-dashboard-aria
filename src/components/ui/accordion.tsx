@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { cn } from "cn"
 import {
   DisclosurePanel as AccordionContentPrimitive,
   Heading as AccordionHeaderPrimitive,
@@ -12,8 +13,6 @@ import {
   type DisclosurePanelProps,
   type DisclosureProps,
 } from "react-aria-components"
-
-import { cn } from "@/lib/utils"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 function Accordion({ className, ...props }: DisclosureGroupProps) {
