@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton href="/dashboard/default">
               <Command />
-              <span className="font-semibold text-base">{APP_CONFIG.name}</span>
+              <span className="text-base font-semibold">{APP_CONFIG.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

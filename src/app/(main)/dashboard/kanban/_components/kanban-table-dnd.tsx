@@ -9,7 +9,7 @@ export function useKanbanTableDnd(setOrder: Dispatch<SetStateAction<string[]>>) 
     getItems: (keys) => [...keys].map((key) => ({ "text/plain": String(key) })),
     getAllowedDropOperations: () => ["move"],
     renderDropIndicator: (target) => (
-      <DropIndicator target={target} className="data-drop-target:outline-2 data-drop-target:outline-ring" />
+      <DropIndicator target={target} className="data-drop-target:outline-ring data-drop-target:outline-2" />
     ),
     onReorder: (event) => {
       setOrder((current) => {

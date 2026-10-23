@@ -55,7 +55,7 @@ export function LayoutControls() {
           </PopoverHeader>
           <div className="space-y-3 **:data-[slot=toggle-group]:w-full **:data-[slot=toggle-group-item]:flex-1 **:data-[slot=toggle-group-item]:text-xs">
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Theme Preset</Label>
+              <Label className="text-xs font-medium">Theme Preset</Label>
               <Select
                 aria-label="Theme Preset"
                 placeholder="Preset"
@@ -90,7 +90,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Fonts</Label>
+              <Label className="text-xs font-medium">Fonts</Label>
               <Select
                 aria-label="Fonts"
                 placeholder="Select font"
@@ -116,7 +116,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Theme Mode</Label>
+              <Label className="text-xs font-medium">Theme Mode</Label>
               <ToggleGroup
                 aria-label="Theme Mode"
                 selectionMode="single"
@@ -143,7 +143,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Page Layout</Label>
+              <Label className="text-xs font-medium">Page Layout</Label>
               <ToggleGroup
                 aria-label="Page Layout"
                 selectionMode="single"
@@ -167,7 +167,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Navbar Behavior</Label>
+              <Label className="text-xs font-medium">Navbar Behavior</Label>
               <ToggleGroup
                 aria-label="Navbar Behavior"
                 selectionMode="single"
@@ -191,7 +191,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Sidebar Style</Label>
+              <Label className="text-xs font-medium">Sidebar Style</Label>
               <ToggleGroup
                 aria-label="Sidebar Style"
                 selectionMode="single"
@@ -218,7 +218,7 @@ export function LayoutControls() {
             </div>
 
             <div className="space-y-1">
-              <Label className="font-medium text-xs">Sidebar Collapse Mode</Label>
+              <Label className="text-xs font-medium">Sidebar Collapse Mode</Label>
               <ToggleGroup
                 aria-label="Sidebar Collapse Mode"
                 selectionMode="single"

@@ -124,7 +124,7 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
     header: "Order",
     cell: ({ row }) => (
       <div className="flex flex-col gap-0.5">
-        <div className="font-medium leading-none">{row.original.id}</div>
+        <div className="leading-none font-medium">{row.original.id}</div>
         <div className="text-muted-foreground text-xs">{row.original.items}</div>
       </div>
     ),
@@ -176,7 +176,7 @@ export const recentOrdersColumns: ColumnDef<DataTableFeatures, OrderRow>[] = [
   {
     accessorKey: "date",
     header: () => <div className="w-44">Date</div>,
-    cell: ({ row }) => <div className="w-44 text-muted-foreground">{formatOrderDate(row.original.date)}</div>,
+    cell: ({ row }) => <div className="text-muted-foreground w-44">{formatOrderDate(row.original.date)}</div>,
   },
   {
     id: "actions",

@@ -56,25 +56,25 @@ export default function Page() {
         </TabsContent>
 
         <TabsContent id="audience">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Audience view coming soon.
           </div>
         </TabsContent>
 
         <TabsContent id="acquisition">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Acquisition view coming soon.
           </div>
         </TabsContent>
 
         <TabsContent id="engagement">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Engagement view coming soon.
           </div>
         </TabsContent>
 
         <TabsContent id="conversions">
-          <div className="flex h-64 items-center justify-center rounded-xl border border-border border-dashed text-muted-foreground">
+          <div className="border-border text-muted-foreground flex h-64 items-center justify-center rounded-xl border border-dashed">
             Conversions view coming soon.
           </div>
         </TabsContent>

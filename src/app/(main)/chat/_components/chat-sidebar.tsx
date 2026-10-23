@@ -43,7 +43,7 @@ export function ChatSidebar() {
   return (
     <Sidebar
       collapsible="offcanvas"
-      className="top-(--header-height) h-[calc(100svh-var(--header-height))]! **:data-[sidebar=sidebar]:bg-background"
+      className="**:data-[sidebar=sidebar]:bg-background top-(--header-height) h-[calc(100svh-var(--header-height))]!"
     >
       <SidebarContent>
         <SidebarGroup>
@@ -109,7 +109,7 @@ export function ChatSidebar() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{currentUser.name}</span>
-                  <span className="truncate text-muted-foreground text-xs">{currentUser.email}</span>
+                  <span className="text-muted-foreground truncate text-xs">{currentUser.email}</span>
                 </div>
                 <EllipsisVertical className="ml-auto" />
               </SidebarMenuButton>
@@ -122,7 +122,7 @@ export function ChatSidebar() {
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-medium">{currentUser.name}</span>
-                        <span className="truncate text-muted-foreground text-xs">{currentUser.email}</span>
+                        <span className="text-muted-foreground truncate text-xs">{currentUser.email}</span>
                       </div>
                     </div>
                   </DropdownMenuLabel>

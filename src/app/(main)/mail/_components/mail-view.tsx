@@ -141,7 +141,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
         {mail ? (
           <div className="flex min-h-0 flex-1 flex-col gap-3">
             <div className="space-y-1.5">
-              <div className="font-medium leading-none">{mail.subject}</div>
+              <div className="leading-none font-medium">{mail.subject}</div>
 
               <div className="text-muted-foreground text-xs leading-none">
                 {format(new Date(mail.receivedAt), "EEE, d MMM yyyy, h:mm a")}
@@ -152,7 +152,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
 
             <div className="flex gap-2">
               <Avatar className="size-9 after:rounded-sm">
-                <AvatarFallback className="rounded-sm bg-background">{mail.from.name[0]}</AvatarFallback>
+                <AvatarFallback className="bg-background rounded-sm">{mail.from.name[0]}</AvatarFallback>
               </Avatar>
 
               <div className="flex h-full flex-col gap-1">
@@ -185,7 +185,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                     slot="trigger"
                     variant="ghost"
                     size="sm"
-                    className="group p-0 font-normal text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
+                    className="group text-muted-foreground hover:text-muted-foreground p-0 font-normal hover:bg-transparent"
                   >
                     Attachments ({mail.attachments.length})
                     <ChevronDown className="transition-transform group-aria-expanded:rotate-180" />
@@ -197,7 +197,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
                         <Button size="xs" variant="secondary" key={attachment.id}>
                           <SimpleIcon icon={attachment.icon} data-icon="inline-start" className="size-3 fill-current" />
                           <span className="font-normal">{attachment.name}</span>
-                          <span className="font-normal text-muted-foreground">{attachment.size}</span>
+                          <span className="text-muted-foreground font-normal">{attachment.size}</span>
                         </Button>
                       ))}
                     </div>
@@ -208,7 +208,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
               </>
             ) : null}
 
-            <div className="scrollbar-none min-h-0 flex-1 overflow-y-auto whitespace-pre-wrap text-sm">{mail.body}</div>
+            <div className="min-h-0 flex-1 scrollbar-none overflow-y-auto text-sm whitespace-pre-wrap">{mail.body}</div>
 
             <div className="mt-auto flex flex-col gap-3">
               <Separator />
@@ -232,7 +232,7 @@ export function MailView({ mail, onClose }: MailDisplayProps) {
             </div>
           </div>
         ) : (
-          <div className="grid h-full place-items-center text-muted-foreground text-sm">No email selected</div>
+          <div className="text-muted-foreground grid h-full place-items-center text-sm">No email selected</div>
         )}
       </div>
     </div>

@@ -46,7 +46,7 @@ function SortIcon({ sortDirection }: { sortDirection: false | "asc" | "desc" }) 
 function TitleColumnHeader({ column }: { column: Column<DataTableFeatures, Task, unknown> }) {
   return (
     <DropdownMenuTrigger>
-      <Button variant="ghost" size="sm" className="-ml-3 text-muted-foreground aria-expanded:bg-accent">
+      <Button variant="ghost" size="sm" className="text-muted-foreground aria-expanded:bg-accent -ml-3">
         Title
         <SortIcon sortDirection={column.getIsSorted()} />
       </Button>
@@ -109,7 +109,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
   {
     accessorKey: "id",
     header: "Task",
-    cell: ({ row }) => <div className="w-20 font-mono text-muted-foreground text-sm">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="text-muted-foreground w-20 font-mono text-sm">{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -126,7 +126,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
               {label.label}
             </Badge>
           )}
-          <span className="max-w-lg truncate font-medium text-sm">{row.getValue("title")}</span>
+          <span className="max-w-lg truncate text-sm font-medium">{row.getValue("title")}</span>
         </div>
       );
     },
@@ -164,7 +164,7 @@ export const columns: ColumnDef<DataTableFeatures, Task>[] = [
 
       return (
         <div className="flex items-center gap-2 text-sm">
-          {priority.icon && <priority.icon className="size-4 text-muted-foreground" />}
+          {priority.icon && <priority.icon className="text-muted-foreground size-4" />}
           {priority.label}
         </div>
       );

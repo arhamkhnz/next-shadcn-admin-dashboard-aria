@@ -65,7 +65,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
                 key={header.id}
                 isRowHeader={index === 0}
                 style={{ width: header.getSize() }}
-                className="h-10 border-y not-last:border-r px-4 text-center font-medium text-foreground text-sm first:text-left"
+                className="text-foreground h-10 border-y px-4 text-center text-sm font-medium not-last:border-r first:text-left"
               >
                 {header.isPlaceholder ? null : <table.FlexRender header={header} />}
               </TableHead>
@@ -74,14 +74,14 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
         </TableHeader>
         <TableBody
           renderEmptyState={() => (
-            <div className="flex h-24 items-center justify-center text-muted-foreground">No results.</div>
+            <div className="text-muted-foreground flex h-24 items-center justify-center">No results.</div>
           )}
         >
           {groupedRows.flatMap((group) => [
-            <TableRow id={`group-${group.label}`} key={`group-${group.label}`} className="h-10 bg-muted">
-              <TableCell className="px-4 text-foreground/60 text-sm">
+            <TableRow id={`group-${group.label}`} key={`group-${group.label}`} className="bg-muted h-10">
+              <TableCell className="text-foreground/60 px-4 text-sm">
                 {group.label}{" "}
-                <Badge variant="outline" className="ml-2 rounded-sm bg-transparent text-muted-foreground text-xs">
+                <Badge variant="outline" className="text-muted-foreground ml-2 rounded-sm bg-transparent text-xs">
                   {group.rows.length} of {totalGroupCounts.get(group.label) ?? 0}
                 </Badge>
               </TableCell>
@@ -93,7 +93,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
                 ))}
             </TableRow>,
             ...group.rows.map((row) => (
-              <TableRow id={row.id} key={row.id} className="h-12 hover:bg-muted/20">
+              <TableRow id={row.id} key={row.id} className="hover:bg-muted/20 h-12">
                 {row.getVisibleCells().map((cell, index) => (
                   <TableCell
                     key={cell.id}
@@ -113,7 +113,7 @@ export function RolesTable({ table }: { table: ReactTable<DataTableFeatures, Rol
         </TableBody>
       </Table>
 
-      <div className="flex items-center border-border/70 border-t p-4">
+      <div className="border-border/70 flex items-center border-t p-4">
         <div className="text-muted-foreground text-sm">
           Showing {start} to {end} of {filteredRows.length} roles
         </div>
