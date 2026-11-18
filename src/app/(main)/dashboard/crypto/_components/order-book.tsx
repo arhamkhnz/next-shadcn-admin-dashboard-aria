@@ -77,10 +77,7 @@ export function OrderBook() {
                     <TableHead className="text-muted-foreground h-8 px-(--card-spacing) text-right text-xs">
                       Size ({asset.symbol})
                     </TableHead>
-                    <TableHead
-                      className="text-muted-foreground h-8 px-(--card-spacing) text-right text-xs"
-                      title="Cumulative value of orders up to this price"
-                    >
+                    <TableHead className="text-muted-foreground h-8 px-(--card-spacing) text-right text-xs">
                       Total (USD)
                     </TableHead>
                   </TableHeader>
