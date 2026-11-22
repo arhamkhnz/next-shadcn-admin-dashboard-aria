@@ -104,7 +104,7 @@ export function AccountActivityTable() {
           className="min-w-180 [&_td]:h-11 [&_td]:px-4 [&_td]:py-2 [&_td:nth-child(4)]:pl-8 [&_th]:h-9 [&_th]:px-4 [&_th:nth-child(4)]:pl-8"
           aria-label="Account activity"
         >
-          <TableHeader className="border-t bg-muted/50 [&_th]:font-mono [&_th]:text-muted-foreground [&_th]:font-normal [&_th]:uppercase">
+          <TableHeader className="bg-muted/50 [&_th]:text-muted-foreground border-t [&_th]:font-mono [&_th]:font-normal [&_th]:uppercase">
             {table.getHeaderGroups().flatMap((group) =>
               group.headers.map((header) => (
                 <TableHead id={header.column.id} key={header.id} isRowHeader={header.column.id === "asset"}>
